@@ -1,12 +1,14 @@
 package com.example.mock2.Entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.sql.Date;
+import java.util.Collection;
+import java.util.Set;
 
 
 @Getter
@@ -14,8 +16,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table (name ="user")
-public class User {
+@ToString
+@Table (name = "user")
+public class User implements UserDetails {
 
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -24,6 +27,8 @@ public class User {
 
     @Column(name = "username")
     private String username;
+    @Column(name = "password")
+    private String password;
 
     @Column(name = "userAddress")
     private String userAddress;
@@ -38,9 +43,73 @@ public class User {
     private String userEmail;
 
     @Column(name = "userDob")
-    private String userDob;
+    private Date userDob;
 
     @Column(name = "userGender")
     private String userGender;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+
+        return null;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "roleId"))
+    private Set<Role> roles;
+
+
+    @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "cart",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "productId"))
+    private Set<Product> products;
+
+
+    @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "user_product_rating",
+            joinColumns = @JoinColumn(name = "userId"),
+            inverseJoinColumns = @JoinColumn(name = "productId"))
+    private Set<Product> ratedProducts;
+
+
+    @OneToMany (mappedBy = "user", fetch = FetchType.EAGER,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE,
+                    CascadeType.PERSIST, CascadeType.REFRESH} )
+    private Set<Bill> bills;
+
+
 }
 
