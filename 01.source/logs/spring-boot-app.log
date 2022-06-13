@@ -13228,3 +13228,10 @@ Caused by: org.hibernate.HibernateException: Access to DialectResolutionInfo can
 	at org.hibernate.service.internal.AbstractServiceRegistryImpl.createService(AbstractServiceRegistryImpl.java:263) ~[hibernate-core-5.6.9.Final.jar:5.6.9.Final]
 	... 38 common frames omitted
 
+2022-06-13 17:21:02.350  WARN 12520 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-06-13 17:21:02.801  WARN 12520 --- [restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 462c9ab4-f02c-46e8-80a0-527a0a9a6cd2
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
