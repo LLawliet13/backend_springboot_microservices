@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService {
         if(user.getAuthorities()!=null) roles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         String access_token = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 1 * 60 * 1000)) // 6s
+                .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000)) // 10p
                 .withIssuer("issuer")
                 .withClaim("roles",roles)
                 .sign(algorithm);

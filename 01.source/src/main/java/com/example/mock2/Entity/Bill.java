@@ -31,10 +31,8 @@ public class Bill {
     @OneToOne (mappedBy = "bill")
     private Delevery delevery;
 
-    @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "bill_detail",
-            joinColumns = @JoinColumn(name = "billId"),
-            inverseJoinColumns = @JoinColumn(name = "productId"))
-    private Set<Product> products;
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "bill")
+
+    private Set<BillDetail> billDetails;
 
 }

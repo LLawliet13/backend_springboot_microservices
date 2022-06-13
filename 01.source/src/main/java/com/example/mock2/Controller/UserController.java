@@ -8,12 +8,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
 @AllArgsConstructor
-@Controller
+@RestController
 public class UserController {
 
 
@@ -47,7 +48,8 @@ public class UserController {
 
     @GetMapping("/login")
     public String getIndex4(Model model) {
-        return "login";
+
+        return "you need to login";
     }
 
 
@@ -74,7 +76,7 @@ public class UserController {
     }
 
     @PostMapping("/signIn")
-    public String login(User user, HttpServletResponse response, Model model) {
+    public User login(User user, HttpServletResponse response, Model model) {
         try {
             Cookie cookie = new Cookie("jwt_token", userService.login(user));
             System.out.println("token: " + cookie.getValue());
@@ -82,9 +84,9 @@ public class UserController {
         } catch (Exception e) {
             System.out.println(e.getMessage());
             model.addAttribute("message", "Fail to login");
-            return "redirect:/login";
+            return null;
         }
-        return "/index";
+        return user;
     }
 
     @GetMapping("/my-account")

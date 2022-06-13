@@ -23,11 +23,19 @@ public class Rating {
     @Column(name = "vote")
     private int vote;
 
-    @Column(name = "productId")
     private long productId;
-
-    @Column(name = "userId")
     private long userId;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "productId",updatable = false,insertable = false)
+    private Product product;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId",updatable = false,insertable = false)
+    private User user;
+
 
 
 }
