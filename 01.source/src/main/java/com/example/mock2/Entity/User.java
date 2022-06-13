@@ -84,25 +84,20 @@ public class User implements UserDetails {
         return true;
     }
 
-    @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "userId"),
             inverseJoinColumns = @JoinColumn(name = "roleId"))
     private Set<Role> roles;
 
 
-    @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "cart",
-            joinColumns = @JoinColumn(name = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "productId"))
-    private Set<Product> products;
+    @OneToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "user")
+    private Set<Rating> ratingSet;
 
 
-    @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "user_product_rating",
-            joinColumns = @JoinColumn(name = "userId"),
-            inverseJoinColumns = @JoinColumn(name = "productId"))
-    private Set<Product> ratedProducts;
+    @OneToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "user")
+
+    private Set<Cart> carts;
 
 
     @OneToMany (mappedBy = "user", fetch = FetchType.EAGER,
