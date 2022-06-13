@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -23,4 +24,8 @@ public class Category {
     @Column(name = "categoryName")
     private String categoryName;
 
+    @OneToMany (mappedBy = "category", fetch = FetchType.EAGER,
+            cascade = {CascadeType.DETACH, CascadeType.MERGE,
+                    CascadeType.PERSIST, CascadeType.REFRESH} )
+    private Set<Product> products;
 }
