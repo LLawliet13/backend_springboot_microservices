@@ -1,5 +1,6 @@
 package com.example.mock2.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 @Table(name ="cart")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Cart {
 
     @Id
@@ -23,15 +25,22 @@ public class Cart {
     @Column(name = "cartQuantity")
     private int cartQuantity;
 
+    @Column(name = "productId")
     private long productId;
+
+    @Column(name = "userId")
     private long userId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId",updatable = false,insertable = false)
+    private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "productId",updatable = false,insertable = false)
     private Product product;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId",updatable = false,insertable = false)
-    private User user;
+
+
+
 }

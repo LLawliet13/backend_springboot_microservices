@@ -1,5 +1,7 @@
 package com.example.mock2.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,12 +16,13 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name ="product")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "productId")
-    private long userId;
+    private long productId;
 
     @Column(name = "productName")
     private String productName;
@@ -33,30 +36,28 @@ public class Product {
     @Column(name = "productRating")
     private float productRating;
 
-    @ManyToOne (cascade = CascadeType.ALL)
-    @JoinColumn(name = "categoryId")
+    @Column(name = "categoryId")
+    private int categoryId;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "categoryId",updatable = false,insertable = false)
     private Category category;
 
-    @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "cart",
-            joinColumns = @JoinColumn(name = "productId"),
-            inverseJoinColumns = @JoinColumn(name = "userId"))
-    private Set<User> users;
+    @JsonBackReference
+    @OneToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "product")
+    private Set<Rating> ratings;
 
-    @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "user_product_rating",
-            joinColumns = @JoinColumn(name = "productId"),
-            inverseJoinColumns = @JoinColumn(name = "userId"))
-    private Set<User> ratedUsers;
+    @JsonBackReference
+    @OneToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "product")
+    private Set<Cart> carts;
 
-    @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinTable(name = "bill_detail",
-            joinColumns = @JoinColumn(name = "productId"),
-            inverseJoinColumns = @JoinColumn(name = "billId"))
-    private Set<Bill> bills;
+    @JsonBackReference
+    @OneToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "product")
+    private Set<BillDetail> billDetails;
 
-    @OneToMany (mappedBy = "product", fetch = FetchType.EAGER,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE,
-                    CascadeType.PERSIST, CascadeType.REFRESH})
-    Set<ProductMedia> productMedia;
+    @JsonBackReference
+    @OneToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "product")
+    private Set<ProductMedia> productMediaSet;
+
 }

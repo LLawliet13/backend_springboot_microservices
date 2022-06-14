@@ -1,5 +1,7 @@
 package com.example.mock2.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name ="role")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Role {
 
     @Id
@@ -24,8 +27,8 @@ public class Role {
     @Column(name = "roleName")
     private String roleName;
 
-
-    @ManyToMany (fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonBackReference
+    @ManyToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "roleId"),
             inverseJoinColumns = @JoinColumn(name = "userId"))

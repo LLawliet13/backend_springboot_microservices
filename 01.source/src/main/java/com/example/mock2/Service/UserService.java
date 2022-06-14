@@ -1,5 +1,6 @@
 package com.example.mock2.Service;
 
+import com.example.mock2.Entity.Product;
 import com.example.mock2.Entity.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,4 +19,6 @@ public interface UserService extends UserDetailsService {
     boolean saveUser(User user);
 
     String login(User user);
+
+    List<Product> findAllProduct();
 }

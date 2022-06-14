@@ -1,6 +1,8 @@
 package com.example.mock2.Entity;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +20,7 @@ import java.util.Set;
 @Entity
 @ToString
 @Table (name = "user")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User implements UserDetails {
 
     @Id
@@ -91,18 +94,16 @@ public class User implements UserDetails {
     private Set<Role> roles;
 
 
+    @JsonBackReference
     @OneToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "user")
-    private Set<Rating> ratingSet;
+    private Set<Rating> ratings;
 
-
+    @JsonBackReference
     @OneToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "user")
-
     private Set<Cart> carts;
 
-
-    @OneToMany (mappedBy = "user", fetch = FetchType.EAGER,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE,
-                    CascadeType.PERSIST, CascadeType.REFRESH} )
+    @JsonBackReference
+    @OneToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "user")
     private Set<Bill> bills;
 
 

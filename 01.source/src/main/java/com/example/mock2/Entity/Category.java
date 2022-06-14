@@ -1,5 +1,7 @@
 package com.example.mock2.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +16,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Entity
 @Table(name ="category")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Category {
 
     @Id
@@ -24,8 +27,7 @@ public class Category {
     @Column(name = "categoryName")
     private String categoryName;
 
-    @OneToMany (mappedBy = "category", fetch = FetchType.EAGER,
-            cascade = {CascadeType.DETACH, CascadeType.MERGE,
-                    CascadeType.PERSIST, CascadeType.REFRESH} )
+    @JsonBackReference
+    @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "category")
     private Set<Product> products;
 }

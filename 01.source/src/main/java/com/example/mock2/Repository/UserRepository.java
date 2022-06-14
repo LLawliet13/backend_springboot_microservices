@@ -1,5 +1,6 @@
 package com.example.mock2.Repository;
 
+import com.example.mock2.Entity.Product;
 import com.example.mock2.Entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -13,6 +14,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u")
     List<User> findAll();
+
+    @Query("SELECT p FROM Product p")
+    List<Product> findAllProduct();
 
     User findByUsername(String username);
 

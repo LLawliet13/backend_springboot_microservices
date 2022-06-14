@@ -1,5 +1,6 @@
 package com.example.mock2.Controller;
 
+import com.example.mock2.Entity.Product;
 import com.example.mock2.Entity.User;
 import com.example.mock2.Service.ProductService;
 import com.example.mock2.Service.UserService;
@@ -24,5 +25,11 @@ public class TestController {
     public List<User> getUser() {
         List<User> users = userService.findAll();
         return users;
+    }
+
+    @GetMapping("/product")
+    public List<Product> getProduct() {
+        List<Product> products = userService.findAllProduct();
+        return products;
     }
 }

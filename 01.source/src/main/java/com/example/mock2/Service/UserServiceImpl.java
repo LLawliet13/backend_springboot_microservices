@@ -2,6 +2,7 @@ package com.example.mock2.Service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.example.mock2.Entity.Product;
 import com.example.mock2.Entity.User;
 import com.example.mock2.Repository.UserRepository;
 import lombok.AllArgsConstructor;
@@ -35,6 +36,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public List<Product> findAllProduct() {
+        return userRepository.findAllProduct();
     }
 
     @Override
