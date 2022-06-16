@@ -10,6 +10,6 @@ import java.util.Set;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category,Long> {
-    Set<Category> findByName(String name);
+    Set<Category> findByCategoryName(String name);
     Page<Category> findAll( Pageable pageable);
 }

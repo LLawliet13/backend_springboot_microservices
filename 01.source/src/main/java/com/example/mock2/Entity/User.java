@@ -56,6 +56,7 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
+        if(this.getRoles() == null ) return null;
         return this.getRoles().stream()
                 .map(r -> new SimpleGrantedAuthority(r.getRoleName()))
                 .collect(Collectors.toSet());
@@ -91,6 +92,7 @@ public class User implements UserDetails {
         return true;
     }
 
+    @JsonBackReference
     @ManyToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "userId"),

@@ -83,9 +83,9 @@ public class UserController {
             response.addCookie(cookie);
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            model.addAttribute("message", "Fail to login");
             return null;
         }
+//        userService.findByUsername(user.getUsername())
         return user;
     }
 

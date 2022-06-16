@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Set;
 
@@ -18,7 +19,7 @@ public class ProductController {
 
     //tra ve toan bo cac the loai
     @Secured({ "ROLE_ADMIN", "ROLE_USER" })
-    @GetMapping("/Product")
+    @GetMapping("/Product/all")
     public ResponseEntity<Set<ProductDTO>> getAllProduct(){
         return ResponseEntity.status(HttpStatus.OK).body(productService.findAllProduct());
     }
@@ -32,29 +33,40 @@ public class ProductController {
     }
 
     @Secured({ "ROLE_ADMIN", "ROLE_USER" })
-    @GetMapping("/Product")
+    @GetMapping("/Product/{name}")
     public ResponseEntity<Set<ProductDTO>> getProductsByName(@RequestParam String name){
         return ResponseEntity.status(HttpStatus.OK).body(productService.findByName(name));
     }
 
     @Secured({ "ROLE_ADMIN", "ROLE_USER" })
-    @GetMapping("/Product/{pageNumber}")
+    @GetMapping("/Product/{name}/{pageNumber}")
     public ResponseEntity<Page<ProductDTO>> getProductsByNamePagination(@RequestParam String name,@RequestParam int pageNumber){
         return ResponseEntity.status(HttpStatus.OK).body(productService.findByName(name,pageNumber));
     }
 
     @Secured({ "ROLE_ADMIN" })
     @PutMapping("/Product/{id}")
-    public ResponseEntity<ProductDTO> updateAProduct(@PathVariable int id,ProductDTO ProductDTO){
-        return ResponseEntity.status(HttpStatus.OK).body(productService.updateAProduct(id,ProductDTO));
+    public ResponseEntity<ProductDTO> updateAProduct(@PathVariable int id,ProductDTO ProductDTO,@RequestParam(name = "files",required = false)MultipartFile[] multipartFile){
+        return ResponseEntity.status(HttpStatus.OK).body(productService.updateAProduct(id,ProductDTO,multipartFile));
     }
 
 
     @Secured({ "ROLE_ADMIN" })
     @PostMapping("/Product")
-    public ResponseEntity<ProductDTO> addAProduct(ProductDTO ProductDTO){
+    public ResponseEntity addAProduct(ProductDTO ProductDTO,@RequestParam(name = "files",required = false)MultipartFile[] multipartFile){
+
+        if(multipartFile == null)
+
         return ResponseEntity.status(HttpStatus.OK).body(productService.addAProduct(ProductDTO));
+        String message = "Fail to add product";
+        try{
+            message = productService.uploadFile(ProductDTO,multipartFile);
+        }catch (Exception ex){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(message);
     }
+
 
     @Secured({ "ROLE_ADMIN" })
     @DeleteMapping("/Product/{id}")

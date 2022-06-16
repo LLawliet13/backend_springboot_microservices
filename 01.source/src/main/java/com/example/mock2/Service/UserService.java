@@ -21,4 +21,7 @@ public interface UserService extends UserDetailsService {
     String login(User user);
 
     List<Product> findAllProduct();
+
+    User findByUsername(String username);
+
 }
