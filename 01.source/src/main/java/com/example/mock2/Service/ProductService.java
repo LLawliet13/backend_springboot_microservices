@@ -27,4 +27,6 @@ public interface ProductService {
 
     Page<List<ProductDTO>> findByCategoryName(String name, int pageNumber);
     List<List<ProductDTO>> findByCategoryName(String name);
+
+    boolean updateProductMedia(ProductDTO productDTO, MultipartFile[] multipartFiles);
 }
