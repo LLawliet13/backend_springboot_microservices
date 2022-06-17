@@ -51,7 +51,6 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         try {
             String filename = file.getOriginalFilename();
             savingPath = root + "\\" + filename;
-//            file.transferTo(new File(savingPath));
             Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING);
         } catch (Exception e) {
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
