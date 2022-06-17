@@ -3,6 +3,7 @@ package com.example.mock2.Service;
 import com.example.mock2.DTO.ProductDTO;
 import com.example.mock2.Entity.Product;
 import com.example.mock2.Entity.ProductMedia;
+import com.example.mock2.Repository.CategoryRepository;
 import com.example.mock2.Repository.ProductMediaRepository;
 import com.example.mock2.Repository.ProductRepository;
 import lombok.AllArgsConstructor;
@@ -25,6 +26,7 @@ public class ProductServiceImpl implements ProductService {
 
     private ProductRepository productRepository;
     private ProductMediaRepository productMediaRepository;
+    private CategoryRepository categoryRepository;
     private FilesStorageService filesStorageService;
 
 
@@ -130,6 +132,24 @@ public class ProductServiceImpl implements ProductService {
         });
         String message = "Uploaded the files successfully: " + fileNames;
         return message;
+    }
+
+    @Override
+    public Page<List<ProductDTO>> findByCategoryName(String name, int pageNumber) {
+        return categoryRepository.findByCategoryName(name,PageRequest.of(pageNumber,NUMBER_OF_ENTITY_PER_PAGE)).map(
+                category -> category.getProducts().stream().map(
+                        product -> product.convertToProductDTO()
+                ).collect(Collectors.toList())
+        );
+    }
+
+    @Override
+    public List<List<ProductDTO>> findByCategoryName(String name) {
+        return categoryRepository.findByCategoryName(name).stream().map(
+                category -> category.getProducts().stream().map(
+                        product -> product.convertToProductDTO()
+                ).collect(Collectors.toList())
+        ).collect(Collectors.toList());
     }
 
 }

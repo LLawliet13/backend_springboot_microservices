@@ -20,7 +20,7 @@ public class ProductDTO {
     private int productQuantity;
     private Float productRating;
     private Category category;
-    private int categoryId;
+    private long categoryId;
     private Set<ProductMedia> productMediaSet;
 
 

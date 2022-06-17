@@ -1,5 +1,6 @@
 package com.example.mock2.DTO;
 
+import com.example.mock2.Entity.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,9 @@ import javax.persistence.Column;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryDTO {
-    private int categoryId;
+    private long categoryId;
     private String categoryName;
+    public Category convertToCategory(){
+        return new Category(categoryId,categoryName);
+    }
 }

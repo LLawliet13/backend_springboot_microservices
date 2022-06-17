@@ -40,7 +40,7 @@ public class Product {
     private float productRating;
 
     @Column(name = "categoryId")
-    private int categoryId;
+    private long categoryId;
 
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -63,7 +63,7 @@ public class Product {
     @OneToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "product")
     private Set<ProductMedia> productMediaSet;
 
-    public Product(long productId, String productName, long productPrice, int productQuantity, float productRating, int categoryId) {
+    public Product(long productId, String productName, long productPrice, int productQuantity, float productRating, long categoryId) {
         this.productId = productId;
         this.productName = productName;
         this.productPrice = productPrice;

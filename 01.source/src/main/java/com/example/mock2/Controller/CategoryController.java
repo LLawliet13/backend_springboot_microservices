@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @RestController
@@ -23,7 +24,7 @@ public class CategoryController {
     //tra ve toan bo cac the loai
     @Secured({ "ROLE_ADMIN", "ROLE_USER" })
     @GetMapping("/Category")
-    public ResponseEntity<Set<CategoryDTO>> getAllCategory(){
+    public ResponseEntity<List<CategoryDTO>> getAllCategory(){
         return ResponseEntity.status(HttpStatus.OK).body(categoryService.findAllCategory());
     }
 
@@ -37,7 +38,7 @@ public class CategoryController {
 
     @Secured({ "ROLE_ADMIN", "ROLE_USER" })
     @GetMapping("/Category/Search")
-    public ResponseEntity<Set<CategoryDTO>> getCategoriesByName(@RequestParam String name,@RequestParam(required = false) int pageNumber){
+    public ResponseEntity<List<CategoryDTO>> getCategoriesByName(@RequestParam String name, @RequestParam(required = false) int pageNumber){
         return ResponseEntity.status(HttpStatus.OK).body(categoryService.findByName(name));
     }
 
