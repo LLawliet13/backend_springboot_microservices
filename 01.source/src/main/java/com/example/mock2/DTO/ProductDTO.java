@@ -1,9 +1,6 @@
 package com.example.mock2.DTO;
 
-import com.example.mock2.Entity.BillDetail;
-import com.example.mock2.Entity.Cart;
-import com.example.mock2.Entity.ProductMedia;
-import com.example.mock2.Entity.Rating;
+import com.example.mock2.Entity.*;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,7 +21,27 @@ public class ProductDTO {
     private long productPrice;
     private int productQuantity;
     private float productRating;
-    private String categoryName;
-    private float rating;
+    private Category category;
+    private int categoryId;
+    private Float rating;
     private Set<ProductMedia> productMediaSet;
+
+
+    public ProductDTO(long productId, String productName, long productPrice, int productQuantity, float productRating, Category category, Float rating, Set<ProductMedia> productMediaSet) {
+        this.productId = productId;
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.productQuantity = productQuantity;
+        this.productRating = productRating;
+        this.category = category;
+        this.rating = rating;
+        this.productMediaSet = productMediaSet;
+        this.categoryId = category.getCategoryId();
+    }
+
+    public Product convertToProduct(){
+        return new Product(productId, productName,productPrice,
+                productQuantity, productRating, categoryId
+                );
+    }
 }

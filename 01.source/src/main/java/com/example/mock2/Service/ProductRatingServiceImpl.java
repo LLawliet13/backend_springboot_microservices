@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class ProductRatingServiceImpl implements ProductRatingService{
+    private static final int NUMBER_OF_ENTITY_PER_PAGE = 10;
+
     @Override
     public ProductRatingDTO updateAProductRating(int id, ProductRatingDTO productRatingDTO) {
         return null;

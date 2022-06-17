@@ -5,21 +5,23 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 public interface ProductService {
     Page<ProductDTO> findAllProduct(int pageNumber);
-    Set<ProductDTO> findAllProduct();
+    List<ProductDTO> findAllProduct();
 
-    ProductDTO updateAProduct(int id, ProductDTO ProductDTO, MultipartFile[] multipartFile);
 
-    ProductDTO addAProduct(ProductDTO ProductDTO);
+    ProductDTO updateAProduct(long id, ProductDTO ProductDTO, MultipartFile[] multipartFile);
 
-    ProductDTO deleteAProduct(int id);
+    ProductDTO addAProduct(ProductDTO ProductDTO, MultipartFile[] multipartFile);
 
-    Set<ProductDTO> findByName(String name);
+    ProductDTO deleteAProduct(long id);
+
+    List<ProductDTO> findByName(String name);
 
     Page<ProductDTO> findByName(String name, int pageNumber);
 
-    String uploadFile(ProductDTO ProductDTO, MultipartFile[] multipartFile) throws IOException;
+    String uploadProductMedia(ProductDTO ProductDTO, MultipartFile[] multipartFile) throws IOException;
 }

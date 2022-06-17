@@ -1,5 +1,6 @@
 package com.example.mock2.Entity;
 
+import com.example.mock2.DTO.ProductDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -8,7 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Getter
 @Setter
@@ -60,4 +63,30 @@ public class Product {
     @OneToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "product")
     private Set<ProductMedia> productMediaSet;
 
+    public Product(long productId, String productName, long productPrice, int productQuantity, float productRating, int categoryId) {
+        this.productId = productId;
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.productQuantity = productQuantity;
+        this.productRating = productRating;
+        this.categoryId = categoryId;
+    }
+
+    public ProductDTO convertToProductDTO(){
+        Float rating ;
+        getRatings();
+        if(ratings == null) rating = null;
+        else {
+            rating = 0f;
+
+            for (Iterator<Rating> it = ratings.iterator(); it.hasNext(); ) {
+                Rating r = it.next();
+                rating += r.getVote();
+            }
+            rating/=ratings.size();
+
+        }
+        return new ProductDTO(productId,productName,productPrice,productQuantity,
+                productRating,category,rating,productMediaSet);
+    }
 }
