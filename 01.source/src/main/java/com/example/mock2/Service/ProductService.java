@@ -24,4 +24,6 @@ public interface ProductService {
     Page<ProductDTO> findByName(String name, int pageNumber);
 
     String uploadProductMedia(ProductDTO ProductDTO, MultipartFile[] multipartFile) throws IOException;
+
+    boolean updateProductMedia(ProductDTO productDTO, MultipartFile[] multipartFiles);
 }

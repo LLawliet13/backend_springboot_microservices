@@ -33,14 +33,14 @@ public class ProductController {
     }
 
     @Secured({ "ROLE_ADMIN", "ROLE_USER" })
-    @GetMapping("/Product/{name}")
-    public ResponseEntity<List<ProductDTO>> getProductsByName(@RequestParam String name){
+    @GetMapping("/Product/Search/{name}")
+    public ResponseEntity<List<ProductDTO>> getProductsByName(@PathVariable String name){
         return ResponseEntity.status(HttpStatus.OK).body(productService.findByName(name));
     }
 
     @Secured({ "ROLE_ADMIN", "ROLE_USER" })
-    @GetMapping("/Product/{name}/{pageNumber}")
-    public ResponseEntity<Page<ProductDTO>> getProductsByNamePagination(@RequestParam String name,@RequestParam int pageNumber){
+    @GetMapping("/Product/Search/{name}/{pageNumber}")
+    public ResponseEntity<Page<ProductDTO>> getProductsByNamePagination(@PathVariable String name,@RequestParam int pageNumber){
         return ResponseEntity.status(HttpStatus.OK).body(productService.findByName(name,pageNumber));
     }
 

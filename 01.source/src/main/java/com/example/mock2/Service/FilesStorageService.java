@@ -18,6 +18,8 @@ public interface FilesStorageService {
 
     public void deleteAll();
 
+    void deleteByPath(String path);
+
     public Stream<Path> loadAll();
 
     public String getFileTypeByProbeContentType(String fileName);
