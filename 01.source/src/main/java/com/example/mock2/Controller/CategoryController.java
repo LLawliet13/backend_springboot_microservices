@@ -7,6 +7,7 @@ import com.example.mock2.Service.CategoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Role;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -37,8 +38,14 @@ public class CategoryController {
     }
 
     @Secured({ "ROLE_ADMIN", "ROLE_USER" })
-    @GetMapping("/Category/Search")
-    public ResponseEntity<List<CategoryDTO>> getCategoriesByName(@RequestParam String name, @RequestParam(required = false) int pageNumber){
+    @GetMapping("/Category/Search/{name}/{pageNumber}")
+    public ResponseEntity<Page<CategoryDTO>> getCategoriesByNamePagination(@PathVariable String name, @PathVariable(required = true) int pageNumber){
+        return ResponseEntity.status(HttpStatus.OK).body(categoryService.findByName(name, pageNumber));
+    }
+
+    @Secured({ "ROLE_ADMIN", "ROLE_USER" })
+    @GetMapping("/Category/Search/{name}")
+    public ResponseEntity<List<CategoryDTO>> getCategoriesByName(@PathVariable String name){
         return ResponseEntity.status(HttpStatus.OK).body(categoryService.findByName(name));
     }
 

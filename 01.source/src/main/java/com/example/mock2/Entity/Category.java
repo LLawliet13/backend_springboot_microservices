@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -40,5 +41,19 @@ public class Category {
 
     public CategoryDTO convertToCategoryDTO(){
         return new CategoryDTO(categoryId,categoryName);
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Category)) return false;
+        Category category = (Category) o;
+        return getCategoryName().equals(category.getCategoryName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getCategoryName());
     }
 }

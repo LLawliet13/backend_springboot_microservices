@@ -45,6 +45,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO updateAProduct(long id, ProductDTO ProductDTO, MultipartFile[] multipartFile) {
+        if(checkIfExisted(ProductDTO.convertToProduct()))
+            throw new RuntimeException("this Product Details already exists");
+
+
         ProductDTO.setProductId(id);
         Product product = productRepository.findById(id).get();
         product.setProductId(id);
@@ -65,6 +69,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO addAProduct(ProductDTO ProductDTO, MultipartFile[] multipartFile) {
+
+        if(checkIfExisted(ProductDTO.convertToProduct()))
+            throw new RuntimeException("this Product Details already exists");
+
         productRepository.save(ProductDTO.convertToProduct());
         System.out.println(ProductDTO);
         List<Product> product = productRepository.findByProductName(ProductDTO.getProductName());
@@ -166,6 +174,12 @@ public class ProductServiceImpl implements ProductService {
         }
         return true;
 
+    }
+    //check name, price, categoryId
+    private boolean checkIfExisted(Product product){
+        List<Product> products = productRepository.findAll();
+        if(products.contains(product)) return true;
+        return false;
     }
 
 }

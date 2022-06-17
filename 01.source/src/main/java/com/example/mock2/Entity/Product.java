@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -90,5 +91,18 @@ public class Product {
         getProductMediaSet();
         return new ProductDTO(productId,productName,productPrice,productQuantity,
                 rating,category,productMediaSet);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Product)) return false;
+        Product product = (Product) o;
+        return getProductPrice() == product.getProductPrice() && getProductName().equals(product.getProductName()) && (getCategoryId() == product.getCategoryId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getProductName(), getProductPrice(), getCategoryId());
     }
 }

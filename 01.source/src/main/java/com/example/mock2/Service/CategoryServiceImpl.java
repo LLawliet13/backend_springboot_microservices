@@ -35,16 +35,22 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Override
     public CategoryDTO updateACategory(long id, CategoryDTO categoryDTO) {
+        if(checkIfExisted(categoryDTO.convertToCategory()))
+            throw new RuntimeException("this Category Name already exists");
+
         Category category = categoryRepository.findById(id).get();
-        category.setCategoryId(id);
-        category.setCategoryName(category.getCategoryName());
+        category.setCategoryName(categoryDTO.getCategoryName());
+
         categoryRepository.save(category);
-        categoryDTO.setCategoryId(id);
-        return categoryDTO;
+        return category.convertToCategoryDTO();
     }
 
     @Override
     public CategoryDTO addACategory(CategoryDTO categoryDTO) {
+
+        if(checkIfExisted(categoryDTO.convertToCategory()))
+            throw new RuntimeException("this Category Name already exists");
+
         categoryRepository.save(categoryDTO.convertToCategory());
         Category category = categoryRepository.findByCategoryName(categoryDTO.getCategoryName()).get(0);
         return category.convertToCategoryDTO();
@@ -54,6 +60,7 @@ public class CategoryServiceImpl implements CategoryService{
     public CategoryDTO deleteACategory(long id) {
 
         Category category = categoryRepository.findById(id).get();
+        categoryRepository.deleteById(id);
         return category.convertToCategoryDTO();
     }
 
@@ -69,5 +76,11 @@ public class CategoryServiceImpl implements CategoryService{
         return categoryRepository.findByCategoryName(name,PageRequest.of(pageNumber,NUMBER_OF_ENTITY_PER_PAGE)).map(
                 category -> category.convertToCategoryDTO()
         );
+    }
+    //check name
+    private boolean checkIfExisted(Category category){
+        List<Category> categories = categoryRepository.findAll();
+        if(categories.contains(category)) return true;
+        return false;
     }
 }
