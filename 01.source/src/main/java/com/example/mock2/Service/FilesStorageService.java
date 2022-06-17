@@ -11,8 +11,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface FilesStorageService {
     public void init();
+    public String getPathFile(MultipartFile file,String subFolder);
 
-    public String save(MultipartFile file);
+    public String save(MultipartFile file,String subFolder);
 
     public Resource load(String filename);
 

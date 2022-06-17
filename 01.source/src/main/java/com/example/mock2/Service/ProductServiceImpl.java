@@ -13,9 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,47 +43,51 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDTO updateAProduct(long id, ProductDTO ProductDTO, MultipartFile[] multipartFile) {
-        if(checkIfExisted(ProductDTO.convertToProduct()))
-            throw new RuntimeException("this Product Details already exists");
+        //check if update product details is the same with other product
+        List<Product> productList = productRepository.findAll();
+        Optional<Product> product1 = productList.stream().filter(
+                p -> p.equals(ProductDTO.convertToProduct())
+        ).findFirst();
+        if(product1.isPresent()){
+            if(product1.get().getProductId() != id)
+                throw new RuntimeException("The product information to be updated is the same as that of another product");
+        }
 
-
-        ProductDTO.setProductId(id);
         Product product = productRepository.findById(id).get();
+        ProductDTO.setProductId(id);
         product.setProductId(id);
         product.setProductPrice(ProductDTO.getProductPrice());
         product.setProductName(ProductDTO.getProductName());
         product.setProductQuantity(ProductDTO.getProductQuantity());
         product.setCategoryId(ProductDTO.getCategoryId());
         product.setProductRating(ProductDTO.getProductRating());
-        productRepository.save(product);
+        productRepository.save(ProductDTO.convertToProduct());
+        ProductDTO.setProductId(id);
+        ProductDTO.setProductMediaSet(updateProductMedia(ProductDTO, multipartFile));
+        return ProductDTO;
 
-
-        updateProductMedia(ProductDTO, multipartFile);
-
-        return productRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("Update Fail!")
-        ).convertToProductDTO();
     }
 
     @Override
     public ProductDTO addAProduct(ProductDTO ProductDTO, MultipartFile[] multipartFile) {
-
-        if(checkIfExisted(ProductDTO.convertToProduct()))
+        MultipartFile[] multipartFiles = multipartFile;
+        if (checkIfExisted(ProductDTO.convertToProduct())) {
             throw new RuntimeException("this Product Details already exists");
-
-        productRepository.save(ProductDTO.convertToProduct());
-        System.out.println(ProductDTO);
-        List<Product> product = productRepository.findByProductName(ProductDTO.getProductName());
-        if (product == null) throw new RuntimeException("Update Fail!");
-
-        try {
-            ProductDTO.setProductId(product.get(0).getProductId());
-            uploadProductMedia(ProductDTO, multipartFile);
-        } catch (IOException e) {
-            throw new RuntimeException(e.getMessage(), e.getCause());
         }
+        else {
+            Product product = productRepository.save(ProductDTO.convertToProduct());
+            System.out.println(ProductDTO);
+            if (product == null) throw new RuntimeException("Update Fail!");
 
-        return product.get(0).convertToProductDTO();
+            try {
+                ProductDTO.setProductId(product.getProductId());
+                ProductDTO.setProductMediaSet(uploadProductMedia(ProductDTO, multipartFiles));
+            } catch (IOException e) {
+                throw new RuntimeException(e.getMessage(), e.getCause());
+            }
+
+            return ProductDTO;
+        }
     }
 
     @Override
@@ -94,7 +96,7 @@ public class ProductServiceImpl implements ProductService {
         ProductDTO productDTO = productRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("Product with this id doesnt exist")).convertToProductDTO();
         productRepository.deleteById(id);
-
+        filesStorageService.deleteByPath(id+"");
         return productDTO;
     }
 
@@ -117,27 +119,26 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public String uploadProductMedia(ProductDTO ProductDTO, MultipartFile[] multipartFile) throws IOException {
-        if (multipartFile == null) return "nothing to upload";
+    public Set<ProductMedia> uploadProductMedia(ProductDTO ProductDTO, MultipartFile[] multipartFile) throws IOException {
+        if (multipartFile == null) return null;
+        Set<ProductMedia> productMediaSet = new HashSet<>();
         List<String> fileNames = new ArrayList<>();
         Arrays.asList(multipartFile).stream().forEach(file -> {
-            String path = filesStorageService.save(file);
+            String path = filesStorageService.save(file,ProductDTO.getProductId()+"");
             String type = filesStorageService.getFileTypeByProbeContentType(file.getOriginalFilename());
             ProductMedia productMedia = new ProductMedia();
             productMedia.setPath(path);
             productMedia.setProductId(ProductDTO.getProductId());
             productMedia.setType(type);
-            productMediaRepository.save(productMedia);
-            fileNames.add(file.getOriginalFilename());
+            productMediaSet.add(productMediaRepository.save(productMedia));
 
         });
-        String message = "Uploaded the files successfully: " + fileNames;
-        return message;
+        return productMediaSet;
     }
 
     @Override
     public Page<List<ProductDTO>> findByCategoryName(String name, int pageNumber) {
-        return categoryRepository.findByCategoryName(name,PageRequest.of(pageNumber,NUMBER_OF_ENTITY_PER_PAGE)).map(
+        return categoryRepository.findByCategoryName(name, PageRequest.of(pageNumber, NUMBER_OF_ENTITY_PER_PAGE)).map(
                 category -> category.getProducts().stream().map(
                         product -> product.convertToProductDTO()
                 ).collect(Collectors.toList())
@@ -154,32 +155,49 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public boolean updateProductMedia(ProductDTO productDTO, MultipartFile[] multipartFiles) {
+    public Set<ProductMedia> updateProductMedia(ProductDTO productDTO, MultipartFile[] multipartFiles) {
 
         List<ProductMedia> product = productMediaRepository.findAllByProductId(productDTO.getProductId());
-
+        Set<ProductMedia> productMediaSet = new HashSet<>();
         for (int i = 0; i < product.size(); i++) {
             filesStorageService.deleteByPath(product.get(i).getPath());
             productMediaRepository.deleteById(product.get(i).getProductMediaId());
         }
+        if(multipartFiles == null) {
+            filesStorageService.deleteByPath(productDTO.getProductId()+"");
+            return null;
+        }
+
         for (int i = 0; i < multipartFiles.length; i++) {
 
-            String path = filesStorageService.save(multipartFiles[i]);
+            String path = filesStorageService.save(multipartFiles[i],productDTO.getProductId()+"");
             String type = filesStorageService.getFileTypeByProbeContentType(multipartFiles[i].getOriginalFilename());
             ProductMedia productMedia1 = new ProductMedia();
             productMedia1.setPath(path);
             productMedia1.setProductId(productDTO.getProductId());
             productMedia1.setType(type);
-            productMediaRepository.save(productMedia1);
+            productMediaSet.add(productMediaRepository.save(productMedia1));
         }
-        return true;
+        return productMediaSet;
 
     }
+
     //check name, price, categoryId
-    private boolean checkIfExisted(Product product){
+    private boolean checkIfExisted(Product product) {
         List<Product> products = productRepository.findAll();
-        if(products.contains(product)) return true;
+
+        if (products.contains(product)) return true;
         return false;
+    }
+
+    private ProductMedia convertToProductMedia(MultipartFile multipartFile, long productId) {
+        String path = filesStorageService.getPathFile(multipartFile,productId+"");
+        String type = filesStorageService.getFileTypeByProbeContentType(multipartFile.getOriginalFilename());
+        ProductMedia productMedia = new ProductMedia();
+        productMedia.setPath(path);
+        productMedia.setProductId(productId);
+        productMedia.setType(type);
+        return productMedia;
     }
 
 }

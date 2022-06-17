@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface ProductMediaRepository extends JpaRepository<ProductMedia,Long> {
     List<ProductMedia> findAllByProductId(long productId);
+    ProductMedia save(ProductMedia productMedia);
 }

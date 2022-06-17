@@ -33,29 +33,77 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         }
     }
 
+    @Override
+    public String getPathFile(MultipartFile file, String subFolder) {
+        String filename = file.getOriginalFilename();
+        return root + "\\" + subFolder + "\\" + filename;
+    }
+
     @PreDestroy
     public void destroy() {
-        System.out.println("deleting upload folder");
-        try {
-            Files.deleteIfExists(root);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not delete upload folder !");
-        }
+//        System.out.println("deleting upload folder");
+//        FileSystemUtils.deleteRecursively(root.toFile());
+
     }
 
     @Override
-    public String save(MultipartFile file) {
+    public String save(MultipartFile file, String subFolder) {
         String savingPath;
         try {
+            File theDir = new File(root + "\\" + subFolder);
+            if (!theDir.exists()) {
+                theDir.mkdirs();
+            }
             String filename = file.getOriginalFilename();
-            savingPath = root + "\\" + filename;
-            Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()),StandardCopyOption.REPLACE_EXISTING);
+            savingPath = root + "\\" + subFolder + "\\" + filename;
+            Files.copy(file.getInputStream(), this.root.resolve(subFolder + "\\" + filename), StandardCopyOption.REPLACE_EXISTING);
         } catch (Exception e) {
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
         }
         return savingPath;
     }
 
+
+
+    @Override
+    public void deleteAll() {
+
+        FileSystemUtils.deleteRecursively(root.toFile());
+    }
+
+    @Override
+    public void deleteByPath(String path) {
+        if(!path.contains(root.toString())){
+            path = root+"\\"+path;
+        }
+        Path pathName = Paths.get(path);
+        FileSystemUtils.deleteRecursively(pathName.toFile());
+    }
+
+
+    public String getFileTypeByProbeContentType(String fileName) {
+        String fileType = "Undetermined";
+        final File file = new File(fileName);
+        try {
+
+            fileType = Files.probeContentType(file.toPath());
+
+        } catch (IOException ioException) {
+            System.out.println("File type not detected for " + fileName);
+        }
+        return fileType;
+
+    }
+
+
+    @Override
+    public Stream<Path> loadAll() {
+        try {
+            return Files.walk(this.root, 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);
+        } catch (IOException e) {
+            throw new RuntimeException("Could not load the files!");
+        }
+    }
     @Override
     public Resource load(String filename) {
         try {
@@ -71,40 +119,6 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         }
     }
 
-    @Override
-    public void deleteAll() {
-
-        FileSystemUtils.deleteRecursively(root.toFile());
-    }
-
-    @Override
-    public void deleteByPath(String path) {
-        Path pathName = Paths.get(path);
-        FileSystemUtils.deleteRecursively(pathName.toFile());
-    }
-
-    @Override
-    public Stream<Path> loadAll() {
-        try {
-            return Files.walk(this.root, 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not load the files!");
-        }
-    }
-
-    public String getFileTypeByProbeContentType(String fileName) {
-        String fileType = "Undetermined";
-        final File file = new File(fileName);
-        try {
-
-            fileType = Files.probeContentType(file.toPath());
-
-        } catch (IOException ioException) {
-            System.out.println("File type not detected for " + fileName);
-        }
-        return fileType;
-
-    }
 
     public static void main(String[] args) {
         System.out.println(root);

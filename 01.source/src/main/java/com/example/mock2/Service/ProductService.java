@@ -1,6 +1,7 @@
 package com.example.mock2.Service;
 
 import com.example.mock2.DTO.ProductDTO;
+import com.example.mock2.Entity.ProductMedia;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,10 +24,10 @@ public interface ProductService {
 
     Page<ProductDTO> findByName(String name, int pageNumber);
 
-    String uploadProductMedia(ProductDTO ProductDTO, MultipartFile[] multipartFile) throws IOException;
+    Set<ProductMedia> uploadProductMedia(ProductDTO ProductDTO, MultipartFile[] multipartFile) throws IOException;
 
     Page<List<ProductDTO>> findByCategoryName(String name, int pageNumber);
     List<List<ProductDTO>> findByCategoryName(String name);
 
-    boolean updateProductMedia(ProductDTO productDTO, MultipartFile[] multipartFiles);
+    Set<ProductMedia> updateProductMedia(ProductDTO productDTO, MultipartFile[] multipartFiles);
 }

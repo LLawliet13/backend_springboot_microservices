@@ -98,11 +98,11 @@ public class Product {
         if (this == o) return true;
         if (!(o instanceof Product)) return false;
         Product product = (Product) o;
-        return getProductPrice() == product.getProductPrice() && getProductName().equals(product.getProductName()) && (getCategoryId() == product.getCategoryId());
+        return getProductPrice() == product.getProductPrice() && getProductQuantity() == product.getProductQuantity() && Float.compare(product.getProductRating(), getProductRating()) == 0 && getCategoryId() == product.getCategoryId() && Objects.equals(getProductName(), product.getProductName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getProductName(), getProductPrice(), getCategoryId());
+        return Objects.hash(getProductName(), getProductPrice(), getProductQuantity(), getProductRating(), getCategoryId());
     }
 }

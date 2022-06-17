@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -34,4 +35,17 @@ public class ProductMedia {
     @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn (name = "productId", updatable = false,insertable = false)
     private Product product;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof ProductMedia)) return false;
+        ProductMedia that = (ProductMedia) o;
+        return getProductId() == that.getProductId() && Objects.equals(getPath(), that.getPath()) && Objects.equals(getType(), that.getType());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPath(), getType(), getProductId());
+    }
 }
