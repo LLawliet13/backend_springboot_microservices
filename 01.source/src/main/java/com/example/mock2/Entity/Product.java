@@ -86,7 +86,9 @@ public class Product {
             rating/=ratings.size();
 
         }
+        getCategory();
+        getProductMediaSet();
         return new ProductDTO(productId,productName,productPrice,productQuantity,
-                productRating,category,rating,productMediaSet);
+                rating,category,productMediaSet);
     }
 }

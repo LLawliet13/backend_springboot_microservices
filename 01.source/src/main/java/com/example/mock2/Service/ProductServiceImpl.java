@@ -47,7 +47,21 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO updateAProduct(long id, ProductDTO ProductDTO, MultipartFile[] multipartFile) {
         ProductDTO.setProductId(id);
-        productRepository.save(ProductDTO.convertToProduct());
+        Product product = productRepository.findById(id).get();
+        product.setProductId(id);
+        product.setProductPrice(ProductDTO.getProductPrice());
+        product.setProductName(ProductDTO.getProductName());
+        product.setProductQuantity(ProductDTO.getProductQuantity());
+        product.setCategoryId(ProductDTO.getCategoryId());
+        product.setProductRating(ProductDTO.getProductRating());
+        productRepository.save(product);
+
+        System.out.println("uploading files");
+        System.out.println("uploading files");
+        System.out.println("uploading files");
+        System.out.println("uploading files");
+
+
         try {
             uploadProductMedia(ProductDTO, multipartFile);
         } catch (IOException e) {
@@ -61,8 +75,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDTO addAProduct(ProductDTO ProductDTO, MultipartFile[] multipartFile) {
         productRepository.save(ProductDTO.convertToProduct());
+        System.out.println(ProductDTO);
         List<Product> product = productRepository.findByProductName(ProductDTO.getProductName());
         if(product == null) throw new RuntimeException("Update Fail!");
+
         try {
             ProductDTO.setProductId(product.get(0).getProductId());
             uploadProductMedia(ProductDTO, multipartFile);
@@ -103,7 +119,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public String uploadProductMedia(ProductDTO ProductDTO, MultipartFile[] multipartFile) throws IOException {
-
+        System.out.println("uploading files");
+        if(multipartFile == null) return "nothing to upload";
         List<String> fileNames = new ArrayList<>();
         Arrays.asList(multipartFile).stream().forEach(file -> {
             String path = filesStorageService.save(file);
