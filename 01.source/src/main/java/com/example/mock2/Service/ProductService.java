@@ -26,8 +26,8 @@ public interface ProductService {
 
     Set<ProductMedia> uploadProductMedia(ProductDTO ProductDTO, MultipartFile[] multipartFile) throws IOException;
 
-    Page<List<ProductDTO>> findByCategoryName(String name, int pageNumber);
-    List<List<ProductDTO>> findByCategoryName(String name);
+    Page<ProductDTO> findByCategoryNamePagination(String name, int pageNumber);
+    List<ProductDTO> findByCategoryName(String name);
 
     Set<ProductMedia> updateProductMedia(ProductDTO productDTO, MultipartFile[] multipartFiles);
 }

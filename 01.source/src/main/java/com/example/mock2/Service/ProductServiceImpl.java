@@ -137,21 +137,18 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Page<List<ProductDTO>> findByCategoryName(String name, int pageNumber) {
-        return categoryRepository.findByCategoryName(name, PageRequest.of(pageNumber, NUMBER_OF_ENTITY_PER_PAGE)).map(
-                category -> category.getProducts().stream().map(
+    public Page<ProductDTO> findByCategoryNamePagination(String name, int pageNumber) {
+        return productRepository.findByCategoryNamePagination(name,PageRequest.of(pageNumber,NUMBER_OF_ENTITY_PER_PAGE))
+                .map(
                         product -> product.convertToProductDTO()
-                ).collect(Collectors.toList())
-        );
+                );
     }
 
     @Override
-    public List<List<ProductDTO>> findByCategoryName(String name) {
-        return categoryRepository.findByCategoryName(name).stream().map(
-                category -> category.getProducts().stream().map(
-                        product -> product.convertToProductDTO()
-                ).collect(Collectors.toList())
-        ).collect(Collectors.toList());
+    public List<ProductDTO> findByCategoryName(String name) {
+       return productRepository.findByCategoryName(name).stream().map(
+               p -> p.convertToProductDTO()
+       ).collect(Collectors.toList());
     }
 
     @Override
