@@ -56,10 +56,6 @@ public class ProductServiceImpl implements ProductService {
         product.setProductRating(ProductDTO.getProductRating());
         productRepository.save(product);
 
-        System.out.println("uploading files");
-        System.out.println("uploading files");
-        System.out.println("uploading files");
-        System.out.println("uploading files");
 
 
         try {
@@ -119,7 +115,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public String uploadProductMedia(ProductDTO ProductDTO, MultipartFile[] multipartFile) throws IOException {
-        System.out.println("uploading files");
         if(multipartFile == null) return "nothing to upload";
         List<String> fileNames = new ArrayList<>();
         Arrays.asList(multipartFile).stream().forEach(file -> {
