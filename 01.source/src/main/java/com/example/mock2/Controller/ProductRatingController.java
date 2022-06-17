@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -38,11 +39,16 @@ public class ProductRatingController {
 //        return ResponseEntity.status(HttpStatus.OK).body(ProductRatingService.findByName(name));
 //    }
 
-//    @Secured({ "ROLE_ADMIN", "ROLE_USER" })
-//    @GetMapping("/ProductRating/{pageNumber}")
-//    public ResponseEntity<Page<ProductRatingDTO>> getProductRatingsByNamePagination(@RequestParam String name,@RequestParam int pageNumber){
-//        return ResponseEntity.status(HttpStatus.OK).body(ProductRatingService.findByName(name,pageNumber));
-//    }
+    @Secured({ "ROLE_ADMIN", "ROLE_USER" })
+    @GetMapping("/ProductRating/{productId}")
+    public ResponseEntity<List<ProductRatingDTO>> getAProductRatingByProduct(@PathVariable long productId){
+        return ResponseEntity.status(HttpStatus.OK).body(ProductRatingService.getProductRatingByProduct(productId));
+    }
+    @Secured({ "ROLE_ADMIN", "ROLE_USER" })
+    @GetMapping("/ProductRating/{productId}/{userId}")
+    public ResponseEntity<ProductRatingDTO> getAProductRatingByUser(@PathVariable long productId,@PathVariable long userId){
+        return ResponseEntity.status(HttpStatus.OK).body(ProductRatingService.getAProductRatingByUser(userId,productId));
+    }
 
     @Secured({ "ROLE_USER" })
     @PutMapping("/ProductRating/{id}")
