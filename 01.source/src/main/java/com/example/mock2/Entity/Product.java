@@ -19,7 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name ="product")
+@Table(name = "product")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Product {
 
@@ -43,25 +43,27 @@ public class Product {
     @Column(name = "categoryId")
     private long categoryId;
 
+    @Transient
+    private int soldNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoryId",updatable = false,insertable = false)
+    @JoinColumn(name = "categoryId", updatable = false, insertable = false)
     private Category category;
 
     @JsonBackReference
-    @OneToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "product")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "product")
     private Set<Rating> ratings;
 
     @JsonBackReference
-    @OneToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "product")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "product")
     private Set<Cart> carts;
 
     @JsonBackReference
-    @OneToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "product")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "product")
     private Set<BillDetail> billDetails;
 
     @JsonBackReference
-    @OneToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "product")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "product")
     private Set<ProductMedia> productMediaSet;
 
     public Product(long productId, String productName, long productPrice, int productQuantity, float productRating, long categoryId) {
@@ -73,10 +75,10 @@ public class Product {
         this.categoryId = categoryId;
     }
 
-    public ProductDTO convertToProductDTO(){
-        Float rating ;
+    public ProductDTO convertToProductDTO() {
+        Float rating;
         getRatings();
-        if(ratings == null) rating = null;
+        if (ratings == null) rating = null;
         else {
             rating = 0f;
 
@@ -84,13 +86,18 @@ public class Product {
                 Rating r = it.next();
                 rating += r.getVote();
             }
-            rating/=ratings.size();
+            rating /= ratings.size();
 
         }
         getCategory();
         getProductMediaSet();
-        return new ProductDTO(productId,productName,productPrice,productQuantity,
-                rating,category,productMediaSet);
+        Set<BillDetail> billDetailSet = getBillDetails();
+        if (billDetailSet == null)
+            soldNumber = 0;
+        else
+            soldNumber = billDetailSet.size();
+        return new ProductDTO(productId, productName, productPrice, productQuantity,
+                rating, category, productMediaSet, soldNumber);
     }
 
     @Override

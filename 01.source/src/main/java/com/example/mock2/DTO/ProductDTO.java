@@ -22,9 +22,9 @@ public class ProductDTO {
     private Category category;
     private long categoryId;
     private Set<ProductMedia> productMediaSet;
+    private int soldNumber;
 
-
-    public ProductDTO(long productId, String productName, long productPrice, int productQuantity, Float productRating, Category category, Set<ProductMedia> productMediaSet) {
+    public ProductDTO(long productId, String productName, long productPrice, int productQuantity, Float productRating, Category category, Set<ProductMedia> productMediaSet,int soldNumber) {
         this.productId = productId;
         this.productName = productName;
         this.productPrice = productPrice;
@@ -33,6 +33,7 @@ public class ProductDTO {
         this.category = category;
         this.productMediaSet = productMediaSet;
         this.categoryId = category.getCategoryId();
+        this.soldNumber = soldNumber;
     }
 
     public Product convertToProduct(){
