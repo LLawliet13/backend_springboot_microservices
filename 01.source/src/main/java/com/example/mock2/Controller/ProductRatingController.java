@@ -18,6 +18,7 @@ public class ProductRatingController {
 
     private ProductRatingService ProductRatingService;
 
+
 //    //tra ve toan bo cac the loai
 //    @Secured({ "ROLE_ADMIN", "ROLE_USER" })
 //    @GetMapping("/ProductRating")
