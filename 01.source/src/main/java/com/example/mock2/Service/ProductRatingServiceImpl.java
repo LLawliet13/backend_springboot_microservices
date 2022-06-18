@@ -54,7 +54,7 @@ public class ProductRatingServiceImpl implements ProductRatingService{
 
     private void updateProductRating(ProductRatingDTO productRatingDTO){
         Product product = productRepository.findById(productRatingDTO.getProductId()).orElseThrow(
-                () -> new RuntimeException("")
+                () -> new RuntimeException("No Product Id Found")
         );
         Float rating;
         Set<Rating> ratings = product.getRatings();

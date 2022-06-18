@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -62,8 +63,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
                 } catch (Exception e) {
                     System.out.println("error:" + e.getMessage());
-                    response.setHeader("error:", e.getMessage());
-//                    response.sendError(HttpStatus.FORBIDDEN.value());
+//                    response.setHeader("error:", e.getMessage());
+//                    response.sendError(HttpStatus.UNAUTHORIZED.value(),e.getMessage());
                     filterChain.doFilter(request, response); // tiep tuc cac filter con lai
                 }
 
