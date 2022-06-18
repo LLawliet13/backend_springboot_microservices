@@ -21,6 +21,8 @@ import java.util.Collection;
 import java.util.List;
 
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
+
+    public static String USERNAME = null;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if(request.getServletPath().equals("/login")){
@@ -43,6 +45,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     JWTVerifier verifier = JWT.require(algorithm).build();// dung algorithm da tao token de build
                     DecodedJWT decodedJWT = verifier.verify(token);// verify xem dung chu ky k
                     String username = decodedJWT.getSubject();
+                    USERNAME = username;
 
                     List<String> roles = decodedJWT.getClaim("roles").asList(String.class);
                     Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();

@@ -2,6 +2,7 @@ package com.example.mock2.Controller;
 
 import com.example.mock2.Entity.Product;
 import com.example.mock2.Entity.User;
+import com.example.mock2.Service.Nam.BillService;
 import com.example.mock2.Service.ProductService;
 import com.example.mock2.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ public class TestController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private BillService billService;
+
     @GetMapping("/user")
     public List<User> getUser() {
         List<User> users = userService.findAll();
@@ -32,4 +36,5 @@ public class TestController {
         List<Product> products = userService.findAllProduct();
         return products;
     }
+
 }

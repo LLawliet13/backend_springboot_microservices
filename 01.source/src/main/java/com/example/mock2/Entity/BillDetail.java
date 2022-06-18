@@ -1,5 +1,6 @@
 package com.example.mock2.Entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -38,6 +39,7 @@ public class BillDetail {
     @JoinColumn(name = "productId",updatable = false,insertable = false)
     private Product product;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "billId",updatable = false,insertable = false)
     private Bill bill;

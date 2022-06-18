@@ -102,7 +102,7 @@ public class User implements UserDetails {
     @OneToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "user")
     private Set<Cart> carts;
 
-    @JsonBackReference
+
     @OneToMany (fetch = FetchType.LAZY, cascade = CascadeType.ALL,mappedBy = "user")
     private Set<Bill> bills;
 
