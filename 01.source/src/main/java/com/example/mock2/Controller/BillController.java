@@ -1,11 +1,11 @@
-package com.example.mock2.Controller.Nam;
+package com.example.mock2.Controller;
 
 import com.example.mock2.DTO.BillDTO;
 import com.example.mock2.Entity.Bill;
 import com.example.mock2.Entity.BillDetail;
-import com.example.mock2.Service.Nam.BillDetailService;
-import com.example.mock2.Service.Nam.BillService;
-import com.example.mock2.Service.Nam.CartService;
+import com.example.mock2.Service.BillDetailService;
+import com.example.mock2.Service.BillService;
+import com.example.mock2.Service.CartService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

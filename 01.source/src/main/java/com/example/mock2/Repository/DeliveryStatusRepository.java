@@ -1,4 +1,4 @@
-package com.example.mock2.Repository.Nam;
+package com.example.mock2.Repository;
 
 import com.example.mock2.Entity.DeliveryStatus;
 import org.springframework.data.jpa.repository.JpaRepository;

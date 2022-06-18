@@ -1,6 +1,7 @@
-package com.example.mock2.Controller.Nam;
+package com.example.mock2.Controller;
 
-import com.example.mock2.Service.Nam.BillDetailService;
+
+import com.example.mock2.Service.DeliveryStatusService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -8,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api")
-public class BillDetailController {
+public class DeliveryStatusController {
 
-    private BillDetailService billDetailService;
+    private DeliveryStatusService deliveryStatusService;
 }

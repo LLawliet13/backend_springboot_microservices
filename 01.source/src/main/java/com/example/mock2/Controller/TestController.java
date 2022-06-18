@@ -2,7 +2,7 @@ package com.example.mock2.Controller;
 
 import com.example.mock2.Entity.Product;
 import com.example.mock2.Entity.User;
-import com.example.mock2.Service.Nam.BillService;
+import com.example.mock2.Service.BillService;
 import com.example.mock2.Service.ProductService;
 import com.example.mock2.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

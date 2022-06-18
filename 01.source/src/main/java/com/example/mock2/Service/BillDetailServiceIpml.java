@@ -1,9 +1,9 @@
-package com.example.mock2.Service.Nam;
+package com.example.mock2.Service;
 
 
 import com.example.mock2.DTO.BillDetailDTO;
 import com.example.mock2.Entity.BillDetail;
-import com.example.mock2.Repository.Nam.BillDetailRepository;
+import com.example.mock2.Repository.BillDetailRepository;
 import com.example.mock2.Repository.ProductRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,10 +1,10 @@
-package com.example.mock2.Service.Nam;
+package com.example.mock2.Service;
 
 
 import com.example.mock2.DTO.CartDTO;
 import com.example.mock2.Entity.BillDetail;
 import com.example.mock2.Entity.Cart;
-import com.example.mock2.Repository.Nam.CartRepository;
+import com.example.mock2.Repository.CartRepository;
 import com.example.mock2.Repository.ProductRepository;
 import com.example.mock2.Repository.UserRepository;
 import lombok.AllArgsConstructor;

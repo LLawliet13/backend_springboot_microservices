@@ -1,4 +1,4 @@
-package com.example.mock2.Service.Nam;
+package com.example.mock2.Service;
 
 import com.example.mock2.DTO.BillDetailDTO;
 import com.example.mock2.Entity.BillDetail;
