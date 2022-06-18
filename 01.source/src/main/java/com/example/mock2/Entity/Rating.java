@@ -1,5 +1,6 @@
 package com.example.mock2.Entity;
 
+import com.example.mock2.DTO.ProductRatingDTO;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -41,6 +42,13 @@ public class Rating {
     @JoinColumn(name = "productId",updatable = false,insertable = false)
     private Product product;
 
+    public Rating(long productId, long userId,int vote) {
+        this.vote = vote;
+        this.productId = productId;
+        this.userId = userId;
+    }
 
-
+    public ProductRatingDTO convertToProductRatingDTO() {
+        return new ProductRatingDTO(productId,userId,product.getProductName(),user.getUserFullname(),vote);
+    }
 }
