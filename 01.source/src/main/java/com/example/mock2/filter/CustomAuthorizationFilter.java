@@ -22,23 +22,24 @@ import java.util.List;
 
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
+
     public static String USERNAME = null;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        if(request.getServletPath().equals("/login")){
-            filterChain.doFilter(request,response);
-        }else{
+        if (request.getServletPath().equals("/login")) {
+            filterChain.doFilter(request, response);
+        } else {
 
             String authorizationHeader;
-            Cookie cookie = getCookie("jwt_token",request);
-            if(cookie!=null){
+            Cookie cookie = getCookie("jwt_token", request);
+            if (cookie != null) {
                 authorizationHeader = cookie.getValue();
                 System.out.println("authorizationHeader in cookie: " + authorizationHeader);
-            }else
-            authorizationHeader = request.getHeader("authorization");
+            } else
+                authorizationHeader = request.getHeader("authorization");
 
-            if(authorizationHeader!=null){
-                try{
+            if (authorizationHeader != null) {
+                try {
 //                    String token = authorizationHeader.substring("token ".length());// cat bearer ra khoi token
                     String token = authorizationHeader;
                     Algorithm algorithm = Algorithm.HMAC256("demo_jwt".getBytes());
@@ -54,25 +55,26 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     );
 
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                            new UsernamePasswordAuthenticationToken(username,null,authorities);
+                            new UsernamePasswordAuthenticationToken(username, null, authorities);
                     //tra ve token sau khi da xac thuc cho context
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
-                    filterChain.doFilter(request,response); // tiep tuc cac filter con lai
+                    filterChain.doFilter(request, response); // tiep tuc cac filter con lai
 
-                }catch (Exception e){
-                    System.out.println("error:"+e.getMessage());
-                    response.setHeader("error:",e.getMessage());
-//                    response.sendError(HttpStatus.FORBIDDEN.value());
-                    filterChain.doFilter(request,response); // tiep tuc cac filter con lai
+                } catch (Exception e) {
+                    System.out.println("error:" + e.getMessage());
+//                    response.setHeader("error:", e.getMessage());
+//                    response.sendError(HttpStatus.UNAUTHORIZED.value(),e.getMessage());
+                    filterChain.doFilter(request, response); // tiep tuc cac filter con lai
                 }
 
-            }else{
-                filterChain.doFilter(request,response);
+            } else {
+                filterChain.doFilter(request, response);
             }
         }
     }
-    private Cookie getCookie(String name,HttpServletRequest request){
+
+    private Cookie getCookie(String name, HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
 
         if (cookies != null) {

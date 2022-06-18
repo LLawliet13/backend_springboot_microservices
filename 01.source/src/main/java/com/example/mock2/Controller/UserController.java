@@ -4,13 +4,18 @@ import com.example.mock2.Entity.User;
 import com.example.mock2.Service.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @AllArgsConstructor
 @RestController
@@ -47,9 +52,8 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String getIndex4(Model model) {
-
-        return "you need to login";
+    public ResponseEntity getIndex4(Model model) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("you need to login");
     }
 
 
@@ -76,17 +80,19 @@ public class UserController {
     }
 
     @PostMapping("/signIn")
-    public User login(User user, HttpServletResponse response, Model model) {
-        try {
-            Cookie cookie = new Cookie("jwt_token", userService.login(user));
-            System.out.println("token: " + cookie.getValue());
-            response.addCookie(cookie);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            model.addAttribute("message", "Fail to login");
-            return null;
-        }
-        return user;
+    public ResponseEntity login(User user,HttpServletRequest request, HttpServletResponse response) {
+
+//        userService.findByUsername(user.getUsername())
+        return ResponseEntity.status(HttpStatus.OK).body(userService.login(user,request,response));
+    }
+    @GetMapping("/logout")
+    public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.logout(request,response));
+    }
+
+    @GetMapping("/useRefreshToken")
+    public ResponseEntity getNewAccessToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getNewAccessToken(request,response));
     }
 
     @GetMapping("/my-account")
