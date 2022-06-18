@@ -1,18 +1,18 @@
 package com.example.mock2.Controller;
 
 import com.example.mock2.Entity.User;
-import lombok.AllArgsConstructor;
 import com.example.mock2.Service.UserService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -24,6 +24,7 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
 
     @GetMapping
     public String getIndex() {

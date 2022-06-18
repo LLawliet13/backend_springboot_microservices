@@ -8,6 +8,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
+import com.example.mock2.Entity.Product;
+
 
 public interface ProductService {
     Page<ProductDTO> findAllProduct(int pageNumber);
@@ -31,4 +33,9 @@ public interface ProductService {
     List<ProductDTO> findByCategoryName(String name);
 
     Set<ProductMedia> updateProductMedia(ProductDTO productDTO, MultipartFile[] multipartFiles);
+
+    long getProductIdByProductName(String productName);
+
+    Product getProductByProductId(long productId);
+
 }

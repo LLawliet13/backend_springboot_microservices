@@ -196,5 +196,12 @@ public class ProductServiceImpl implements ProductService {
         productMedia.setType(type);
         return productMedia;
     }
+    public long getProductIdByProductName(String productName) {
+        return productRepository.getProductIdByProductName(productName);
+    }
+
+    public Product getProductByProductId(long productId) {
+        return productRepository.getProductByProductId(productId);
+    }
 
 }

@@ -29,4 +29,15 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     Page<Product> findByCategoryNamePagination(String name,Pageable pageable);
     Product save(Product product);
 
+    @Query ("SELECT p.productId FROM Product p WHERE p.productName = ?1")
+    long getProductIdByProductName(String productName);
+
+    @Query ("SELECT p.productName FROM Product p WHERE p.productId = ?1")
+    String getProductNameByProductId(long productId);
+
+    @Query ("SELECT p.productPrice FROM Product p WHERE p.productId = ?1")
+    long getProductPrice(long productId);
+
+    Product getProductByProductId(long productId);
 }
+
