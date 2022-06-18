@@ -28,25 +28,21 @@ public class Bill {
     private String purchaseDate;
 
     @Column(name = "totalPrice")
-    private int totalPrice;
+    private long totalPrice;
 
     @Column(name = "userId")
     private long userId;
 
-
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId", updatable = false,insertable = false)
     private User user;
 
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "productId",updatable = false,insertable = false)
-//    private Product product;
 
-    @JsonBackReference
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "bill")
     private Set<BillDetail> billDetails;
 
     @JsonBackReference
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "bill")
-    private Set<DeleveryStatus> deleveryStatuses;
+    private Set<DeliveryStatus> deliveryStatuses;
 }

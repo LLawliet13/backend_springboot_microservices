@@ -10,6 +10,8 @@ import java.util.List;
 
 public interface UserService extends UserDetailsService {
 
+    long getUserIdByUsername(String username);
+
     User findById(long id);
 
     List<User> findAll();

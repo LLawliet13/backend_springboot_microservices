@@ -6,6 +6,7 @@ import com.example.mock2.Entity.Product;
 import com.example.mock2.Entity.User;
 import com.example.mock2.Repository.UserRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,10 +24,16 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
+@Configuration
 public class UserServiceImpl implements UserService {
 
 
     private UserRepository userRepository;
+
+
+    public long getUserIdByUsername(String username) {
+        return userRepository.getUserIdByUsername(username);
+    }
 
     @Override
     public User findById(long id) {
@@ -88,7 +95,7 @@ public class UserServiceImpl implements UserService {
         if(user.getAuthorities()!=null) roles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         String access_token = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 1000)) // 10p
+                .withExpiresAt(new Date(System.currentTimeMillis() + 60 * 60 * 1000)) // 10p
                 .withIssuer("issuer")
                 .withClaim("roles",roles)
                 .sign(algorithm);
