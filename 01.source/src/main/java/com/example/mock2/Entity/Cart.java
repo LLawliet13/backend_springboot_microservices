@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 
 @Getter
 @Setter
@@ -23,6 +24,7 @@ public class Cart {
     @Column(name = "cartId")
     private long cartId;
 
+    @Min(value = 1, message = "quantity must greater than 0")
     @Column(name = "cartQuantity")
     private int cartQuantity;
 

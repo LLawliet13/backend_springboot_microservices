@@ -129,8 +129,13 @@ public class ProductServiceImpl implements ProductService {
             ProductMedia productMedia = new ProductMedia();
             productMedia.setPath(path);
             productMedia.setProductId(ProductDTO.getProductId());
+
+            if (type == null) {
+                type = "Unknown";
+            }
             productMedia.setType(type);
-            productMediaSet.add(productMediaRepository.save(productMedia));
+
+            productMediaSet.add(productMediaRepository.saveAndFlush(productMedia));
 
         });
         return productMediaSet;
@@ -187,15 +192,7 @@ public class ProductServiceImpl implements ProductService {
         return false;
     }
 
-    private ProductMedia convertToProductMedia(MultipartFile multipartFile, long productId) {
-        String path = filesStorageService.getPathFile(multipartFile,productId+"");
-        String type = filesStorageService.getFileTypeByProbeContentType(multipartFile.getOriginalFilename());
-        ProductMedia productMedia = new ProductMedia();
-        productMedia.setPath(path);
-        productMedia.setProductId(productId);
-        productMedia.setType(type);
-        return productMedia;
-    }
+
     public long getProductIdByProductName(String productName) {
         return productRepository.getProductIdByProductName(productName);
     }
