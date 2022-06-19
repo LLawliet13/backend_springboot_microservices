@@ -51,5 +51,14 @@ public class ExceptionsHandler {
         return new ResponseEntity<> (errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleException (Exception ex) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+        return new ResponseEntity<> (errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 
 }
