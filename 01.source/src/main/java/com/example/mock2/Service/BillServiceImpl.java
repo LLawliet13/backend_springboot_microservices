@@ -46,6 +46,9 @@ public class BillServiceImpl implements BillService {
             billDTO.setBillDetailList(billDetailService.
                                         convertBillDetailToBillDetailDTO(bill.getBillDetails()));
 
+            billDTO.setDeliverySet(deliveryStatusService.
+                                        convertDeliveryToDeliveryDTO(bill.getDeliveryStatuses()));
+
             billDTOList.add(billDTO);
         }
 
@@ -72,25 +75,38 @@ public class BillServiceImpl implements BillService {
 
     @Override
     public Bill findBillByBillId(long billId) {
-        return billRepository.findBillByBillId(billId);
+        Bill bill = billRepository.findBillByBillId(billId);
+        if (bill == null) {
+            throw new InputException("Bill not exist. Please check again!");
+        }
+        return bill;
     }
 
     @Override
     public long checkout() {
         Bill bill = new Bill();
+
         Set<BillDetail> billDetails = cartService.convertToBillDetail(USERNAME);
 
         bill.setUserId(userRepository.getUserIdByUsername(USERNAME));
         bill.setTotalPrice(cartService.getTotalPrice(USERNAME));
 
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         bill.setPurchaseDate(LocalDate.now().format(formatter));
 
-        billRepository.save(bill);
+        try {
+            billRepository.save(bill);
+        } catch (Exception ex) {
+            throw new InputException("Cart must not empty. Please check again!");
+        }
+
+        bill.setBillDetails(billDetails);
 
         billDetails.forEach(billDetail -> billDetail.setBillId(bill.getBillId()));
         billDetailService.addBillDetails(billDetails);
+//        bill.setBillDetails(billDetails);
 
         deliveryStatusService.addDefaultDeliveryStatus(bill);
 

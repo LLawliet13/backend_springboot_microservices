@@ -78,7 +78,13 @@ public class CartServiceImpl implements CartService{
         for (int i = 0; i < productName.length; i++) {
             Cart cart = new Cart();
             cart.setCartQuantity(quantity[i]);
-            cart.setProductId(productRepository.getProductIdByProductName(productName[i]));
+
+            try {
+                cart.setProductId(productRepository.getProductIdByProductName(productName[i]));
+            } catch (Exception ex) {
+                throw new InputException("Product name invalid. Please check again!");
+            }
+
             cart.setUserId(userRepository.getUserIdByUsername(USERNAME));
 
             Cart old_cart = cartRepository.findCartByProductIdAndUserId(cart.getProductId(), cart.getUserId());
