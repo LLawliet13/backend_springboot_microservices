@@ -3,6 +3,3 @@
 2022-06-19 18:55:50.989  INFO 18908 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
 
 admin do View Bill
-admin do View Bill
-admin do View Bill
-2022/06/19 19:01:34:admin do View Bill
