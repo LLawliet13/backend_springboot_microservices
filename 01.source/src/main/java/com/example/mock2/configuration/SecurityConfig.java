@@ -1,6 +1,7 @@
 package com.example.mock2.configuration;
 
 import com.example.mock2.Service.CustomLogoutHandler;
+import com.example.mock2.Service.CustomSuccessHandler;
 import com.example.mock2.filter.CustomAuthorizationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -50,7 +51,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .logoutUrl("/logout")
                 .addLogoutHandler(customLogoutHandler)
-                .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK))
+                .logoutSuccessHandler(
+//                        new HttpStatusReturningLogoutSuccessHandler(HttpStatus.OK)
+                       new CustomSuccessHandler()
+                )
                 .permitAll()
 
 //
