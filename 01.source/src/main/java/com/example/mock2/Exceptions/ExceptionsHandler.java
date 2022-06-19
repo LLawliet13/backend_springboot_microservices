@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.validation.ConstraintViolationException;
 
@@ -51,6 +52,24 @@ public class ExceptionsHandler {
         return new ResponseEntity<> (errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleException (MethodArgumentTypeMismatchException ex) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage("Invalid input format. Please check again!");
+        errorResponse.setStatus(HttpStatus.BAD_REQUEST.value());
+
+        return new ResponseEntity<> (errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleException (Exception ex) {
+        ErrorResponse errorResponse = new ErrorResponse();
+        errorResponse.setMessage(ex.getMessage());
+        errorResponse.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+        return new ResponseEntity<> (errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
 
 }

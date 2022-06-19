@@ -6,6 +6,7 @@ import com.example.mock2.Service.CartService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +35,7 @@ public class CartController {
 //    }
 
 
+    @Secured({ "ROLE_USER" })
     @GetMapping("/cart")
     public ResponseEntity<?> getCartFromUser() {
 
@@ -44,7 +46,8 @@ public class CartController {
         Map<String, Object> result = new LinkedHashMap<String,Object>();
 
         result.put("All products in cart", cartDTOList);
-        result.put("Total price:", totalPrice);
+        result.put("Total price", totalPrice);
+
 
         return new ResponseEntity<Map<String,Object>>(result, HttpStatus.OK);
 
@@ -53,6 +56,7 @@ public class CartController {
 
 //    POST cart: nếu quantity <= 0 ném Exception
 //    Chỉ cho phép add 1 product duy nhất cho 1 request
+    @Secured({ "ROLE_USER" })
     @PostMapping("/cart")
     public String addCart(@RequestParam String productName, @RequestParam @Min(value = 1, message = "quantity must greater than 0") int quantity) {
 
@@ -63,6 +67,7 @@ public class CartController {
 
 //    PUT cart: không cho phép add new product,
 //    Cho phép chỉnh sửa số lượng nhiều sản phẩm cùng lúc
+    @Secured({ "ROLE_USER" })
     @PutMapping("/cart")
     public String updateCart(@RequestParam String[] productName, @RequestParam int[] quantity) {
 
@@ -72,7 +77,7 @@ public class CartController {
     }
 
 
-
+    @Secured({ "ROLE_USER" })
     @DeleteMapping("/cart/reset")
     public String resetCart() {
         cartService.resetCart();

@@ -17,4 +17,8 @@ public interface BillService {
     Bill findBillByBillId(long billId);
 
     long checkout();
+
+    void updateBill(long billId, String[] productName, int[] quantity);
+
+    void deleteBill(long billId);
 }
