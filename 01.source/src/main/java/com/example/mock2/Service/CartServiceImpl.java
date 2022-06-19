@@ -4,6 +4,7 @@ package com.example.mock2.Service;
 import com.example.mock2.DTO.CartDTO;
 import com.example.mock2.Entity.BillDetail;
 import com.example.mock2.Entity.Cart;
+import com.example.mock2.Exceptions.InputException;
 import com.example.mock2.Repository.CartRepository;
 import com.example.mock2.Repository.ProductRepository;
 import com.example.mock2.Repository.UserRepository;
@@ -64,10 +65,6 @@ public class CartServiceImpl implements CartService{
 
             cartRepository.save(cart);
 
-        } else if (cart.getCartQuantity() <= 0) {
-
-            throw new RuntimeException();
-
         } else {
             int newQuantity = old_cart.getCartQuantity() + cart.getCartQuantity();
 
@@ -88,7 +85,7 @@ public class CartServiceImpl implements CartService{
 
             if (old_cart == null) {
 
-                throw new RuntimeException();
+                throw new InputException("Product name not exist in cart. Please check again!");
 
             } else {
                 int newQuantity = old_cart.getCartQuantity() + cart.getCartQuantity();

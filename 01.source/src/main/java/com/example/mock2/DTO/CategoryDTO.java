@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
@@ -14,6 +14,8 @@ import javax.persistence.Column;
 @NoArgsConstructor
 public class CategoryDTO {
     private long categoryId;
+
+    @NotBlank(message = "name must not blank")
     private String categoryName;
     public Category convertToCategory(){
         return new Category(categoryId,categoryName);

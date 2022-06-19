@@ -6,8 +6,10 @@ import com.example.mock2.Service.CartService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.constraints.Min;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,7 @@ import static com.example.mock2.filter.CustomAuthorizationFilter.USERNAME;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api")
+@Validated
 public class CartController {
 
     private CartService cartService;
@@ -51,7 +54,7 @@ public class CartController {
 //    POST cart: nếu quantity <= 0 ném Exception
 //    Chỉ cho phép add 1 product duy nhất cho 1 request
     @PostMapping("/cart")
-    public String addCart(@RequestParam String productName, @RequestParam int quantity) {
+    public String addCart(@RequestParam String productName, @RequestParam @Min(value = 1, message = "quantity must greater than 0") int quantity) {
 
         cartService.addCart(productName, quantity);
 

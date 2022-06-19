@@ -1,20 +1,16 @@
 package com.example.mock2.Controller;
 
 import com.example.mock2.DTO.CategoryDTO;
-import com.example.mock2.DTO.ProductDTO;
-import com.example.mock2.Entity.Category;
 import com.example.mock2.Service.CategoryService;
 import lombok.AllArgsConstructor;
-import org.springframework.context.annotation.Role;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @AllArgsConstructor
@@ -60,7 +56,7 @@ public class CategoryController {
 
     @Secured({ "ROLE_ADMIN" })
     @PostMapping("/Category")
-    public ResponseEntity<CategoryDTO> addACategory(CategoryDTO categoryDTO){
+    public ResponseEntity<CategoryDTO> addACategory(@Valid CategoryDTO categoryDTO){
         return ResponseEntity.status(HttpStatus.OK).body(categoryService.addACategory(categoryDTO));
     }
 
