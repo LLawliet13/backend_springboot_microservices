@@ -7,13 +7,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@Validated
 public class CategoryController {
 
     private CategoryService categoryService;
@@ -29,7 +32,7 @@ public class CategoryController {
     //Tra ve danh sach cac the loai phan theo trang
     @Secured({ "ROLE_ADMIN", "ROLE_USER" })
     @GetMapping("/Category/{pageNumber}")
-    public ResponseEntity<Page<CategoryDTO>> getAllCategoryPagination(@PathVariable int pageNumber){
+    public ResponseEntity<Page<CategoryDTO>> getAllCategoryPagination(@PathVariable @Min(value = 0,message = "pageNumber shouldn't be smaller than 0") int pageNumber){
         return ResponseEntity.status(HttpStatus.OK).body(categoryService.findAllCategory(pageNumber));
     }
 
