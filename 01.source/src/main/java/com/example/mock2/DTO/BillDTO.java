@@ -22,5 +22,5 @@ public class BillDTO {
 
     private Set<BillDetailDTO> billDetailList;
 
-
+    private Set<DeliveryDTO> deliverySet;
 }

@@ -13,4 +13,6 @@ public interface BillDetailService {
 
 
     Set<BillDetail> findByBillId(long billId);
+
+    void deleteBillDetailsByBillId(long billId);
 }

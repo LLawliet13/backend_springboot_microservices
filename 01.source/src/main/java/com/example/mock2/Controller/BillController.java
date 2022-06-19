@@ -10,6 +10,7 @@ import com.example.mock2.Service.LogService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.LinkedHashMap;
@@ -31,6 +32,7 @@ public class BillController {
 
     private LogService logService;
 
+    @Secured({ "ROLE_ADMIN", "ROLE_USER" })
     @GetMapping("/bill")
     public ResponseEntity<List<BillDTO>> getBillFromUser() {
         logService.info(USERNAME,"View Bill");
@@ -40,15 +42,18 @@ public class BillController {
         return ResponseEntity.status(HttpStatus.OK).body(billDTOList);
     }
 
+    @Secured({ "ROLE_ADMIN", "ROLE_USER" })
     @GetMapping("/bill/{billId}")
     public ResponseEntity<?> getBillFromBillId(@PathVariable long billId) {
 
         Map<String, Object> result = new LinkedHashMap<String,Object>();
+        Bill bill = billService.findBillByBillId(billId);
 
         Set<BillDetail> billDetailSet = billDetailService.findByBillId(billId);
-        result.put("Bill id: ", billId);
-        result.put("Bill detail information:", billDetailService
+        result.put("Bill id", billId);
+        result.put("Bill detail information", billDetailService
                 .convertBillDetailToBillDetailDTO(billDetailSet));
+        result.put("Total price", bill.getTotalPrice());
 
         return new ResponseEntity<Map<String,Object>>(result, HttpStatus.OK);
     }
@@ -58,6 +63,7 @@ public class BillController {
 //    sang BillDetail thêm vào 1 bill được tạo mới
 //    Xóa thông tin cart (giỏ hàng) hiện tại
 
+    @Secured({ "ROLE_USER" })
     @PostMapping("/bill/checkout")
     public ResponseEntity<?> checkout() {
 
@@ -68,12 +74,44 @@ public class BillController {
         Map<String, Object> result = new LinkedHashMap<String,Object>();
 
         Set<BillDetail> billDetailSet = billDetailService.findByBillId(billId);
-        result.put("Add successfully bill id: ", billId);
-        result.put("Bill detail information:", billDetailService
+        result.put("Add successfully bill id", billId);
+        result.put("Bill detail information", billDetailService
                                             .convertBillDetailToBillDetailDTO(billDetailSet));
+        result.put("Total price", bill.getTotalPrice());
 
         cartService.resetCart();
 
         return new ResponseEntity<Map<String,Object>>(result, HttpStatus.OK);
+    }
+
+
+    @Secured({ "ROLE_ADMIN" })
+    @PutMapping("/bill/{billId}")
+    public ResponseEntity<?> updateBill(@PathVariable long billId,
+                             @RequestParam String[] productName, @RequestParam int[] quantity) {
+
+        billService.updateBill(billId, productName, quantity);
+
+        Map<String, Object> result = new LinkedHashMap<String,Object>();
+
+        Set<BillDetail> billDetailSet = billDetailService.findByBillId(billId);
+        Bill bill = billService.findBillByBillId(billId);
+
+        result.put("Updated successfully bill id", billId);
+        result.put("Bill detail information", billDetailService
+                .convertBillDetailToBillDetailDTO(billDetailSet));
+        result.put("Total price", bill.getTotalPrice());
+
+
+        return new ResponseEntity<Map<String,Object>>(result, HttpStatus.OK);
+    }
+
+    @Secured({ "ROLE_ADMIN" })
+    @DeleteMapping("/bill/{billId}")
+    public String deleteBill(@PathVariable long billId) {
+
+        billService.deleteBill(billId);
+
+        return "Bill id: " + billId + " has been deleted";
     }
 }
