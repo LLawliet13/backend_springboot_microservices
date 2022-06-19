@@ -1,6 +1,7 @@
 package com.example.mock2.Entity;
 
 
+import com.example.mock2.DTO.UserDTO;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
@@ -52,6 +53,22 @@ public class User implements UserDetails {
 
     @Column(name = "userGender")
     private String userGender;
+
+//    public User(long userId, String userAddress, String userFullName
+//            , String userPhone, String userEmail, Date userDob, String userGender) {
+//
+//    }
+
+    public User(long userId, String username, String userAddress, String userFullname, String userPhone, String userEmail, Date userDob, String userGender) {
+        this.userId = userId;
+        this.username = username;
+        this.userAddress = userAddress;
+        this.userFullname = userFullname;
+        this.userPhone = userPhone;
+        this.userEmail = userEmail;
+        this.userDob = userDob;
+        this.userGender = userGender;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -113,5 +130,9 @@ public class User implements UserDetails {
     private Set<Bill> bills;
 
 
+    public UserDTO convertToUserDTO() {
+        return new UserDTO(userId,username,userAddress,userFullname,userPhone,
+                userEmail,userDob,userGender);
+    }
 }
 

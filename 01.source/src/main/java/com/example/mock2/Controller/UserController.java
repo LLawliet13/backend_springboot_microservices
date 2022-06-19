@@ -1,5 +1,6 @@
 package com.example.mock2.Controller;
 
+import com.example.mock2.DTO.UserDTO;
 import com.example.mock2.Entity.User;
 import com.example.mock2.Service.UserService;
 import lombok.AllArgsConstructor;
@@ -8,17 +9,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 import java.io.IOException;
 
 @AllArgsConstructor
 @RestController
+@Validated
 public class UserController {
 
 
@@ -73,27 +78,54 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(User user) {
-        System.out.println(user);
+    public ResponseEntity register(@Valid UserDTO userDTO,@RequestParam(required = false) @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$",
+            message = "password format: Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+                           )String password) {
+        User user =  userDTO.convertToUser();
+        user.setPassword(password);
         userService.saveUser(user);
-        return "redirect:/login";
+        return ResponseEntity.status(HttpStatus.OK).body("Register Successfully");
     }
 
     @PostMapping("/signIn")
-    public ResponseEntity login(User user,HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity login(User user, HttpServletRequest request, HttpServletResponse response) {
 
 //        userService.findByUsername(user.getUsername())
-        return ResponseEntity.status(HttpStatus.OK).body(userService.login(user,request,response));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.login(user, request, response));
     }
 
 
     @GetMapping("/useRefreshToken")
     public ResponseEntity getNewAccessToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.getNewAccessToken(request,response));
+        return ResponseEntity.status(HttpStatus.OK).body(userService.getNewAccessToken(request, response));
+    }
+
+    @Secured("ROLE_USER")
+    @PutMapping("/Profile/{id}")
+    public ResponseEntity updateUserProfile(@PathVariable @Min(value = 1, message = "userId must higher than 0") long id, @Valid UserDTO userDTO, @RequestParam(required = false) @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$",
+            message = "password format: Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character")
+            String password) {
+
+        userDTO.setUserId(id);
+        User user = userDTO.convertToUser();
+        user.setPassword(password);
+        return ResponseEntity.status(HttpStatus.OK).body(userService.updateAUser(user));
+    }
+
+
+    @Secured("ROLE_USER")
+    @PutMapping("/Profile/Password/{id}")
+    public ResponseEntity updatePassword(@PathVariable @Min(value = 1, message = "userId must higher than 0") long id, @RequestParam(required = false) @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#&()–[{}]:;',?/*~$^+=<>]).{8,20}$",
+            message = "password format: Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character")
+            String password) {
+        User user = new User();
+        user.setUserId(id);
+        user.setPassword(password);
+        return ResponseEntity.status(HttpStatus.OK).body(userService.updateAUser(user));
     }
 
     @GetMapping("/my-account")
-    public String getInfo (Model model){
+    public String getInfo(Model model) {
 
         User user = new User();
         user.setUserFullname("Hoang Nam");

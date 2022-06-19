@@ -1,1 +1,4 @@
 2022/06/19 19:01:34:admin do View Bill
+LoggerTYPE: INFO: 2022/06/19 21:49:05: admin do update Category by id: 1 with info:CategoryDTO(categoryId=0, categoryName=Phone Update)
+LoggerTYPE: INFO: 2022/06/19 21:49:05: admin do update Category by id: 1 with info:CategoryDTO(categoryId=0, categoryName=Phone Update)
+LoggerTYPE: INFO: 2022/06/19 21:49:15: admin do update Category by id: 1 with info:CategoryDTO(categoryId=0, categoryName=Phone Update 2)

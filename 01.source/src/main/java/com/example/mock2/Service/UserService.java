@@ -1,5 +1,6 @@
 package com.example.mock2.Service;
 
+import com.example.mock2.DTO.UserDTO;
 import com.example.mock2.Entity.Product;
 import com.example.mock2.Entity.User;
 import org.springframework.http.HttpCookie;
@@ -29,6 +30,8 @@ public interface UserService extends UserDetailsService {
     List<Product> findAllProduct();
 
     User findByUsername(String username);
+
+    UserDTO updateAUser(User user);
 
     String getNewAccessToken(HttpServletRequest request,HttpServletResponse response) throws IOException;
 }

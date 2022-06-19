@@ -4,8 +4,11 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.example.mock2.DTO.UserDTO;
 import com.example.mock2.Entity.Product;
+import com.example.mock2.Entity.Role;
 import com.example.mock2.Entity.User;
+import com.example.mock2.Repository.RoleRepository;
 import com.example.mock2.Repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,7 +38,7 @@ public class UserServiceImpl implements UserService {
 
 
     private UserRepository userRepository;
-
+    private RoleRepository roleRepository;
 
     public long getUserIdByUsername(String username) {
         return userRepository.getUserIdByUsername(username);
@@ -61,6 +64,32 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUsername(username);
     }
 
+    @Override
+    public UserDTO updateAUser(User user) {
+        User existedUser = userRepository.findById(user.getUserId());
+        if (existedUser == null) throw new RuntimeException("this user id doesn't exit");
+
+        if (user.getUserEmail() != null && !user.getUserEmail().isEmpty())
+        existedUser.setUserEmail(user.getUserEmail());
+
+        if (user.getUserAddress() != null && !user.getUserAddress().isEmpty())
+        existedUser.setUserAddress(user.getUserAddress());
+
+        if (user.getUserPhone() != null && !user.getUserPhone().isEmpty())
+        existedUser.setUserPhone(user.getUserPhone());
+
+        if (user.getUserFullname() != null && !user.getUserFullname().isEmpty())
+        existedUser.setUserFullname(user.getUserFullname());
+
+        if (user.getUserDob() != null)
+        existedUser.setUserDob(user.getUserDob());
+
+        if (user.getPassword() != null && !user.getPassword().isEmpty())
+            existedUser.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        userRepository.saveAndFlush(existedUser);
+        return existedUser.convertToUserDTO();
+    }
 
 
     @Override
@@ -69,19 +98,25 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     private PasswordEncoder passwordEncoder;
     private AuthenticationManager authenticationManager;
+
     @Override
     public boolean saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        Role userRole = roleRepository.findByRoleName("ROLE_USER");
+//        userRole.getUsers().add(user);
+        Set<Role> roleSet = new HashSet<>();
+        roleSet.add(userRole);
+        user.setRoles(roleSet);
+        userRepository.saveAndFlush(user);
+
         return true;
     }
 
 
     @Override
-    public String login(User user,HttpServletRequest request,HttpServletResponse response) {
+    public String login(User user, HttpServletRequest request, HttpServletResponse response) {
         Authentication authentication = authenticate(user);
         try {
             Cookie ac_cookie = new Cookie("jwt_token", getAccessToken(authentication));
@@ -98,9 +133,8 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     @Override
-    public String getNewAccessToken(HttpServletRequest request,HttpServletResponse response) throws IOException {
+    public String getNewAccessToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader;
         Cookie cookie = getCookie("refresh_token", request);
         if (cookie != null) {
@@ -127,10 +161,10 @@ public class UserServiceImpl implements UserService {
                         .withSubject(username)
                         .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 100)) // 10p
                         .withIssuer(issuer)
-                        .withClaim("roles",roles)
+                        .withClaim("roles", roles)
                         .sign(algorithm);
 
-                response.addCookie(new Cookie("jwt_token",access_token));
+                response.addCookie(new Cookie("jwt_token", access_token));
 
             } catch (Exception e) {
                 System.out.println("error:" + e.getMessage());
@@ -142,7 +176,7 @@ public class UserServiceImpl implements UserService {
         return "Refresh Access token Successfully";
     }
 
-    private Authentication authenticate(User user){
+    private Authentication authenticate(User user) {
         String username = user.getUsername();
         String password = user.getPassword();
         System.out.println("username:" + username + "\npassword:" + password);
@@ -157,32 +191,36 @@ public class UserServiceImpl implements UserService {
         }
         return authentication;
     }
-    private String getAccessToken(Authentication authentication){
+
+    private String getAccessToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         Algorithm algorithm = Algorithm.HMAC256("demo_jwt".getBytes());
         List<String> roles = new ArrayList<>();
-        if(user.getAuthorities()!=null) roles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        if (user.getAuthorities() != null)
+            roles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         String access_token = JWT.create()
                 .withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 10 * 60 * 100)) // 1p
                 .withIssuer("issuer")
-                .withClaim("roles",roles)
+                .withClaim("roles", roles)
                 .sign(algorithm);
 
 
         return access_token;
 
     }
-    private String getRefreshToken(Authentication authentication){
+
+    private String getRefreshToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         Algorithm algorithm = Algorithm.HMAC256("demo_jwt".getBytes());
         List<String> roles = new ArrayList<>();
-        if(user.getAuthorities()!=null) roles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+        if (user.getAuthorities() != null)
+            roles = user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         String refresh_token = JWT.create()
                 .withSubject(user.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis()+1000*60*1000)) // 1000phut
+                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 1000)) // 1000phut
                 .withIssuer("issuer")
-                .withClaim("roles",roles)
+                .withClaim("roles", roles)
                 .sign(algorithm);
         return refresh_token;
     }

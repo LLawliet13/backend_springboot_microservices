@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import java.util.Set;
 
 @Getter
@@ -15,11 +17,15 @@ import java.util.Set;
 public class ProductDTO {
 
     private long productId;
+    @NotBlank(message = "product name must not blank")
     private String productName;
+    @Min(value = 1,message = "product price must higher than 0")
     private long productPrice;
+    @Min(value = 0,message = "product Quantity must not smaller than 0")
     private int productQuantity;
     private Float productRating;
     private Category category;
+    @Min(value = 1,message = "categoryId must higher than 0")
     private long categoryId;
     private Set<ProductMedia> productMediaSet;
     private int soldNumber;
