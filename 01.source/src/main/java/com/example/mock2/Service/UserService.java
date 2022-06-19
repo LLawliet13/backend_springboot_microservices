@@ -25,7 +25,6 @@ public interface UserService extends UserDetailsService {
     boolean saveUser(User user);
 
     String login(User user,HttpServletRequest request,HttpServletResponse response);
-    String logout(HttpServletRequest request, HttpServletResponse response);
 
     List<Product> findAllProduct();
 

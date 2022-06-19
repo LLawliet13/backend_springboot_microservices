@@ -97,17 +97,7 @@ public class UserServiceImpl implements UserService {
         return "login successfully";
     }
 
-    @Override
-    public String logout(HttpServletRequest request, HttpServletResponse response) {
-        Cookie jwt_token_cookie = getCookie("jwt_token",request);
-        Cookie refresh_token_cookie = getCookie("refresh_token",request);
-        System.out.println("jwt_token"+jwt_token_cookie+"\nrefresh_token"+refresh_token_cookie);
-        jwt_token_cookie.setMaxAge(0);
-        response.addCookie(jwt_token_cookie);
-        refresh_token_cookie.setMaxAge(0);
-        response.addCookie(refresh_token_cookie);
-        return "logout complete";
-    }
+
 
     @Override
     public String getNewAccessToken(HttpServletRequest request,HttpServletResponse response) throws IOException {

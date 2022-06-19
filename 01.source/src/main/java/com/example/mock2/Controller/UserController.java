@@ -85,10 +85,7 @@ public class UserController {
 //        userService.findByUsername(user.getUsername())
         return ResponseEntity.status(HttpStatus.OK).body(userService.login(user,request,response));
     }
-    @GetMapping("/logout")
-    public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response){
-        return ResponseEntity.status(HttpStatus.OK).body(userService.logout(request,response));
-    }
+
 
     @GetMapping("/useRefreshToken")
     public ResponseEntity getNewAccessToken(HttpServletRequest request, HttpServletResponse response) throws IOException {

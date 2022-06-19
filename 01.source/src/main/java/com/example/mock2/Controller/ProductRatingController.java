@@ -3,20 +3,19 @@ package com.example.mock2.Controller;
 import com.example.mock2.DTO.ProductRatingDTO;
 import com.example.mock2.Service.ProductRatingService;
 import lombok.AllArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
 
 @AllArgsConstructor
 @RestController
 public class ProductRatingController {
 
     private ProductRatingService ProductRatingService;
+
 
 //    //tra ve toan bo cac the loai
 //    @Secured({ "ROLE_ADMIN", "ROLE_USER" })
