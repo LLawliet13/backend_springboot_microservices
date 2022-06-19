@@ -6,6 +6,7 @@ import com.example.mock2.Entity.BillDetail;
 import com.example.mock2.Service.BillDetailService;
 import com.example.mock2.Service.BillService;
 import com.example.mock2.Service.CartService;
+import com.example.mock2.Service.LogService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,10 +29,11 @@ public class BillController {
     private BillDetailService billDetailService;
     private CartService cartService;
 
+    private LogService logService;
 
     @GetMapping("/bill")
     public ResponseEntity<List<BillDTO>> getBillFromUser() {
-
+        logService.info(USERNAME,"View Bill");
         List<Bill> bills = billService.findBillByUserUsername(USERNAME);
         List<BillDTO> billDTOList = billService.convertBillToBillDTO(bills);
 
