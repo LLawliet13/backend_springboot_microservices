@@ -4,6 +4,8 @@ import com.example.mock2.DTO.CartDTO;
 import com.example.mock2.Entity.Cart;
 import com.example.mock2.Service.CartService;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -23,6 +25,8 @@ import static com.example.mock2.filter.CustomAuthorizationFilter.USERNAME;
 public class CartController {
 
     private CartService cartService;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CartController.class);
 
 
 //    @GetMapping("/cart")
@@ -46,6 +50,8 @@ public class CartController {
         result.put("All products in cart", cartDTOList);
         result.put("Total price:", totalPrice);
 
+
+        LOGGER.warn("User " + USERNAME + " has been view on cart");
         return new ResponseEntity<Map<String,Object>>(result, HttpStatus.OK);
 
     }

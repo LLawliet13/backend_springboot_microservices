@@ -1,0 +1,1 @@
+2022-06-19 18:49:03.833  WARN 2948 --- [http-nio-8080-exec-5] c.e.mock2.Controller.CartController      : User user has been view on cart
