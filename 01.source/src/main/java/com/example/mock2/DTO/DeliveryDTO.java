@@ -1,11 +1,20 @@
 package com.example.mock2.DTO;
 
-public class DeliveryDTO {
+import lombok.*;
 
-    private long deliveryStatusId;
-
-    private String status;
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
+public class DeliveryDTO implements Comparable<DeliveryDTO> {
 
     private String deliveryTime;
+    private String status;
+
+    @Override
+    public int compareTo(DeliveryDTO o) {
+        return this.getDeliveryTime().compareTo(o.getDeliveryTime());
+    }
 
 }

@@ -25,6 +25,7 @@ public class UserDTO {
     private String userPhone;
     @Pattern(regexp = "^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$",
             message = "user email is invalid. form: jwhite@domain.com")
+//    @Email
     private String userEmail;
 //    @Pattern(regexp = "^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$",
 //    message = "user dob is invalid. must be  yyyy-mm-dd")
