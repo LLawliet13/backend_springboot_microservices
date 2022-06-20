@@ -55,6 +55,7 @@ public class BillController {
                 .convertBillDetailToBillDetailDTO(billDetailSet));
         result.put("Total price", bill.getTotalPrice());
 
+        logService.info(USERNAME,"view bill id" + billId);
         return new ResponseEntity<Map<String,Object>>(result, HttpStatus.OK);
     }
 
@@ -81,6 +82,8 @@ public class BillController {
 
         cartService.resetCart();
 
+        logService.info(USERNAME,"check out cart to bill id" + billId);
+
         return new ResponseEntity<Map<String,Object>>(result, HttpStatus.OK);
     }
 
@@ -102,7 +105,7 @@ public class BillController {
                 .convertBillDetailToBillDetailDTO(billDetailSet));
         result.put("Total price", bill.getTotalPrice());
 
-
+        logService.info(USERNAME,"update bill id" + billId);
         return new ResponseEntity<Map<String,Object>>(result, HttpStatus.OK);
     }
 
@@ -112,6 +115,7 @@ public class BillController {
 
         billService.deleteBill(billId);
 
+        logService.info(USERNAME,"delete bill" + billId);
         return "Bill id: " + billId + " has been deleted";
     }
 }

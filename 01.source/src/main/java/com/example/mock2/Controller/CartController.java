@@ -3,6 +3,7 @@ package com.example.mock2.Controller;
 import com.example.mock2.DTO.CartDTO;
 import com.example.mock2.Entity.Cart;
 import com.example.mock2.Service.CartService;
+import com.example.mock2.Service.LogService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class CartController {
 
     private CartService cartService;
 
-
+    private LogService logService;
 //    @GetMapping("/cart")
 //    public ResponseEntity<List<CartDTO>> getCartFromUser() {
 //
@@ -48,7 +49,7 @@ public class CartController {
         result.put("All products in cart", cartDTOList);
         result.put("Total price", totalPrice);
 
-
+        logService.info(USERNAME,"view cart");
         return new ResponseEntity<Map<String,Object>>(result, HttpStatus.OK);
 
     }
@@ -62,6 +63,7 @@ public class CartController {
 
         cartService.addCart(productName, quantity);
 
+        logService.info(USERNAME,"add product to cart");
         return "Product add to cart successfully!";
     }
 
@@ -73,6 +75,7 @@ public class CartController {
 
         cartService.updateCart(productName, quantity);
 
+        logService.info(USERNAME,"update cart");
         return "Cart has been updated";
     }
 
@@ -81,6 +84,8 @@ public class CartController {
     @DeleteMapping("/cart/reset")
     public String resetCart() {
         cartService.resetCart();
+
+        logService.info(USERNAME,"reset cart");
         return "Cart has been reset";
     }
 
