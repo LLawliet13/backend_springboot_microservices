@@ -1,6 +1,5 @@
 package com.example.mock2.DTO;
 
-import com.example.mock2.Entity.User;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -34,7 +33,5 @@ public class UserDTO {
 
     private String userGender;
 
-    public User convertToUser(){
-        return new User( userId,  username,  userAddress,  userFullname,  userPhone,  userEmail,  userDob, userGender);
-    }
+
 }

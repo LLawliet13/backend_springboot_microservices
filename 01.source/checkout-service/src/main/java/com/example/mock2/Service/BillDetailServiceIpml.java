@@ -2,26 +2,34 @@ package com.example.mock2.Service;
 
 
 import com.example.mock2.DTO.BillDetailDTO;
+import com.example.mock2.DTO.ProductDTO;
 import com.example.mock2.Entity.Bill;
 import com.example.mock2.Entity.BillDetail;
 import com.example.mock2.Exceptions.InputException;
 import com.example.mock2.Repository.BillDetailRepository;
 import com.example.mock2.Repository.BillRepository;
-import com.example.mock2.Repository.ProductRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+
+import static com.example.mock2.filter.CustomAuthorizationFilter.token_in_header;
 
 @AllArgsConstructor
 @Service
 public class BillDetailServiceIpml implements BillDetailService {
 
+    private RestTemplate restTemplate;
+
     private BillDetailRepository billDetailRepository;
 
     private BillRepository billRepository;
 
-    private ProductRepository productRepository;
 
     public void addBillDetails(Set<BillDetail> billDetails) {
         for (BillDetail billDetail : billDetails) {
@@ -31,18 +39,25 @@ public class BillDetailServiceIpml implements BillDetailService {
 
     @Override
     public Set<BillDetailDTO> convertBillDetailToBillDetailDTO(Set<BillDetail> billDetails) {
+        //
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("authorization",token_in_header);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpEntity<String> entity = new HttpEntity<>("body", headers);
+
+
+
         Set<BillDetailDTO> billDetailDTOList = new TreeSet<>();
 
         for (BillDetail billDetail:billDetails) {
             BillDetailDTO billDetailDTO = new BillDetailDTO();
 
-            if(billDetail.getProduct() == null) {
-                long productId = billDetail.getProductId();
-                billDetail.setProduct(productRepository.getProductByProductId(productId));
-            }
+            long productId = billDetail.getProductId();
+            ProductDTO productDTO = restTemplate.exchange("http://product-service/Product/SearchId/"+productId,
+                    HttpMethod.GET,entity,ProductDTO.class).getBody();
 
-            billDetailDTO.setProductName(billDetail.getProduct().getProductName());
-            billDetailDTO.setProductPrice(billDetail.getProduct().getProductPrice());
+            billDetailDTO.setProductName(productDTO.getProductName());
+            billDetailDTO.setProductPrice(productDTO.getProductPrice());
             billDetailDTO.setQuantity(billDetail.getBillDetailQuantity());
 
             billDetailDTOList.add(billDetailDTO);

@@ -1,12 +1,9 @@
 package com.example.mock2.configuration;
 
-import com.example.mock2.Service.CustomLogoutHandler;
-import com.example.mock2.Service.CustomSuccessHandler;
 import com.example.mock2.filter.CustomAuthorizationFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;

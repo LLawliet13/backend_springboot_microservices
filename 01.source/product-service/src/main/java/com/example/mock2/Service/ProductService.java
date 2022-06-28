@@ -8,7 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Set;
-import com.example.mock2.Entity.Product;
 
 
 public interface ProductService {
@@ -36,6 +35,7 @@ public interface ProductService {
 
     long getProductIdByProductName(String productName);
 
-    Product getProductByProductId(long productId);
+    ProductDTO getProductByProductId(long productId);
 
+    ProductDTO findExactByName(String name);
 }

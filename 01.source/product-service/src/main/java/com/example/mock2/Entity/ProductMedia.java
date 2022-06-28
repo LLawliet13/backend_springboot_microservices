@@ -14,7 +14,7 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name ="productMedia")
+@Table(name ="productmedia")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class ProductMedia {
 
