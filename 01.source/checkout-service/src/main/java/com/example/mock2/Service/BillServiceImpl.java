@@ -1,13 +1,12 @@
 package com.example.mock2.Service;
 
 import com.example.mock2.DTO.BillDTO;
+import com.example.mock2.DTO.ProductDTO;
 import com.example.mock2.DTO.UserDTO;
 import com.example.mock2.Entity.Bill;
 import com.example.mock2.Entity.BillDetail;
 import com.example.mock2.Exceptions.InputException;
 import com.example.mock2.Repository.BillRepository;
-import com.example.mock2.Repository.ProductRepository;
-import com.example.mock2.Repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -29,8 +28,6 @@ import static com.example.mock2.filter.CustomAuthorizationFilter.token_in_header
 public class BillServiceImpl implements BillService {
 
     private BillRepository billRepository;
-    private UserRepository userRepository;
-    private ProductRepository productRepository;
     private RestTemplate restTemplate;
     private DeliveryStatusService deliveryStatusService;
     private CartService cartService;
@@ -89,14 +86,16 @@ public class BillServiceImpl implements BillService {
     @Override
     public long checkout() {
         Bill bill = new Bill();
+
         //
         HttpHeaders headers = new HttpHeaders();
         headers.add("authorization",token_in_header);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity = new HttpEntity<>("body", headers);
 
-        UserDTO userDTO = restTemplate.exchange("http://user-service/User/Search"+USERNAME,
+        UserDTO userDTO = restTemplate.exchange("http://user-service/User/Search/"+USERNAME,
                 HttpMethod.GET,entity,UserDTO.class).getBody();
+        //
 
         Set<BillDetail> billDetails = cartService.convertToBillDetail(USERNAME);
 
@@ -129,10 +128,21 @@ public class BillServiceImpl implements BillService {
     @Transactional
     public void updateBill(long billId, String[] productName, int[] quantity) {
 
+        //
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("authorization",token_in_header);
+        headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+        HttpEntity<String> entity = new HttpEntity<>("body", headers);
+        //
+
+
         Set<BillDetail> billDetailSet = new HashSet<>();
         long totalPrice = 0;
 
         for (int i = 0; i < productName.length; i++) {
+
+            ProductDTO productDTO = restTemplate.exchange("http://product-service/Product/SearchExact/"+productName[i],
+                    HttpMethod.GET,entity,ProductDTO.class).getBody();
 
             if (quantity[i] < 0) {
                 throw new InputException("Quantity must greater than 0!");
@@ -142,14 +152,14 @@ public class BillServiceImpl implements BillService {
             billDetail.setBillDetailQuantity(quantity[i]);
             long productId;
             try {
-                productId = productRepository.getProductIdByProductName(productName[i]);
+                productId = productDTO.getProductId();
             } catch (Exception ex){
                 throw new InputException("Product name: " + productName[i] + " invalid!");
             }
-            totalPrice += productRepository.getProductPrice(productId) * quantity[i];
+            totalPrice += productDTO.getProductPrice() * quantity[i];
 
             billDetail.setProductId(productId);
-            billDetail.setBillDetailPrice(productRepository.getProductPrice(productId));
+            billDetail.setBillDetailPrice(productDTO.getProductPrice());
             billDetail.setBillId(billId);
 
             billDetailSet.add(billDetail);

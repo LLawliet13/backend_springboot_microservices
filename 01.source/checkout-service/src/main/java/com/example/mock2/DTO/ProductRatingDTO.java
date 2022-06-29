@@ -1,8 +1,5 @@
 package com.example.mock2.DTO;
 
-import com.example.mock2.Entity.Product;
-import com.example.mock2.Entity.Rating;
-import com.example.mock2.Entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -35,7 +32,5 @@ public class ProductRatingDTO {
         this.vote = vote;
     }
 
-    public Rating convertToProductRating() {
-        return new Rating(productId,userId,vote);
-    }
+
 }

@@ -49,12 +49,27 @@ public class ProductController {
     }
 
     @Secured({ "ROLE_ADMIN", "ROLE_USER" })
+    @GetMapping("/Product/SearchId/{productId}")
+    public ResponseEntity<ProductDTO> getProductsById(@PathVariable long productId){
+        logService.info(USERNAME,"view All Product by Id: "+productId);
+        logger.info(USERNAME+" view All Product by Id: "+productId);
+        return ResponseEntity.status(HttpStatus.OK).body(productService.getProductByProductId(productId));
+    }
+
+    @Secured({ "ROLE_ADMIN", "ROLE_USER" })
     @GetMapping("/Product/Search/{name}")
     public ResponseEntity<List<ProductDTO>> getProductsByName(@PathVariable  @NotBlank(message = "product name shouldn't be blank ") String name){
         logService.info(USERNAME,"view All Product by name: "+name);
         logger.info(USERNAME+" view All Product by name: "+name);
         return ResponseEntity.status(HttpStatus.OK).body(productService.findByName(name));
     }
+
+    @Secured({ "ROLE_ADMIN", "ROLE_USER" })
+    @GetMapping("/Product/SearchExact/{name}")
+    public ResponseEntity<ProductDTO> getProductByName(@PathVariable String name){
+        return ResponseEntity.status(HttpStatus.OK).body(productService.findExactByName(name));
+    }
+
 
     @Secured({ "ROLE_ADMIN", "ROLE_USER" })
     @GetMapping("/Product/Search/{name}/{pageNumber}")

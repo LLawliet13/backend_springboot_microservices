@@ -14,6 +14,9 @@ public interface BillRepository extends JpaRepository<Bill, Long> {
 
     List<Bill> findBillByUserId(long userId);
 
+
+    @Query (value = "SELECT * FROM bill WHERE userId = " +
+            "(SELECT userId FROM user WHERE username = ?1)", nativeQuery = true)
     List<Bill> findBillByUserUsername(String username);
 
     Bill findBillByBillId(long billId);

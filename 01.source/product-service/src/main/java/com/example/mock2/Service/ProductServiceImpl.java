@@ -102,7 +102,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<ProductDTO> findByName(String name) {
-        List<Product> product = productRepository.findByProductName(name);
+        List<Product> product = productRepository.findByProductNames(name);
         if (product == null) throw new RuntimeException("cant find");
         return product.stream().map(
                 product1 -> product1.convertToProductDTO()
@@ -197,8 +197,14 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.getProductIdByProductName(productName);
     }
 
-    public Product getProductByProductId(long productId) {
-        return productRepository.getProductByProductId(productId);
+    public ProductDTO getProductByProductId(long productId) {
+        return productRepository.getProductByProductId(productId).convertToProductDTO();
+    }
+
+
+    public ProductDTO findExactByName(String name){
+        Product product = productRepository.findByProductName(name);
+        return product.convertToProductDTO();
     }
 
 }

@@ -35,9 +35,6 @@ public class BillDetail {
     @Column(name = "billId")
     private long billId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "productId",updatable = false,insertable = false)
-    private Product product;
 
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)

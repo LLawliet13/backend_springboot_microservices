@@ -15,6 +15,23 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/mock2
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 12345
+      
+  checkout-service:
+    container_name: checkout-service
+    build: ./checkout-service
+    ports:
+      - "8081:8081"
+    networks:
+      - all-services
+    depends_on:
+      - mysqldb
+      - eureka-server
+      - gateway-authorization-service
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka 
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/mock2
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 12345
   product-service:
     container_name: product-service
     build: ./product-service
