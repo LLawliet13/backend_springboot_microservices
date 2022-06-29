@@ -20,6 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findById(long id);
 
-    @Query(nativeQuery = true,value="select DISTINCT u.* from user u  join bill b on u.userId = b.userId join billDetail bd  on b.billId = bd.billId where u.userId = ?1 and bd.productId = ?2")
+    @Query(nativeQuery = true,value="select DISTINCT u.* from user u  join bill b on u.userId = b.userId join bill_Detail bd  on b.billId = bd.billId where u.userId = ?1 and bd.productId = ?2")
     User checkIfUserBoughtProduct(long userid, long productId);
 }

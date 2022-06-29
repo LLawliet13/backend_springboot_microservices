@@ -21,9 +21,7 @@ USE `mock2`;
 -- Table structure for table `bill`
 --
 
-DROP TABLE IF EXISTS `bill`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `bill` (
   `billId` bigint NOT NULL AUTO_INCREMENT,
   `purchaseDate` date NOT NULL,
@@ -50,9 +48,6 @@ UNLOCK TABLES;
 -- Table structure for table `bill_detail`
 --
 
-DROP TABLE IF EXISTS `bill_detail`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bill_detail` (
   `billDetailId` bigint NOT NULL AUTO_INCREMENT,
   `billDetailPrice` bigint DEFAULT NULL,
@@ -78,45 +73,10 @@ INSERT INTO `bill_detail` VALUES (1,5000,1,1,1);
 UNLOCK TABLES;
 
 --
--- Table structure for table `billdetail`
---
-
-DROP TABLE IF EXISTS `billdetail`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `billdetail` (
-  `billDetailId` bigint NOT NULL AUTO_INCREMENT,
-  `billDetailPrice` bigint NOT NULL,
-  `billDetailQuantity` int NOT NULL,
-  `billId` bigint DEFAULT NULL,
-  `productId` bigint DEFAULT NULL,
-  PRIMARY KEY (`billDetailId`),
-  KEY `productId` (`productId`),
-  KEY `billId` (`billId`),
-  CONSTRAINT `billdetail_ibfk_1` FOREIGN KEY (`productId`) REFERENCES `product` (`productId`),
-  CONSTRAINT `billdetail_ibfk_2` FOREIGN KEY (`billId`) REFERENCES `bill` (`billId`),
-  CONSTRAINT `billdetail_chk_1` CHECK ((`billDetailPrice` > 0)),
-  CONSTRAINT `billdetail_chk_2` CHECK ((`billDetailQuantity` > 0))
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `billdetail`
---
-
-LOCK TABLES `billdetail` WRITE;
-/*!40000 ALTER TABLE `billdetail` DISABLE KEYS */;
-INSERT INTO `billdetail` VALUES (1,2000,2,1,1),(2,3000,2,1,2),(3,4000,1,2,4),(4,3000,1,2,3),(5,10000,3,3,2);
-/*!40000 ALTER TABLE `billdetail` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `cart`
 --
 
-DROP TABLE IF EXISTS `cart`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `cart` (
   `cartId` bigint NOT NULL AUTO_INCREMENT,
   `productId` bigint NOT NULL,
@@ -145,9 +105,7 @@ UNLOCK TABLES;
 -- Table structure for table `category`
 --
 
-DROP TABLE IF EXISTS `category`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `category` (
   `categoryId` int NOT NULL AUTO_INCREMENT,
   `categoryName` varchar(20) DEFAULT NULL,
@@ -161,7 +119,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (1,'Phone Update 2'),(2,'bike'),(4,'Iphone'),(5,'IphoneXS'),(6,'IphoneE');
+INSERT INTO `category` VALUES (1,'Phone Update 2'),(2,'bike'),(4,'Iphone'),(5,'IphoneXS'),(6,'IphoneSX');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -169,9 +127,6 @@ UNLOCK TABLES;
 -- Table structure for table `delivery_status`
 --
 
-DROP TABLE IF EXISTS `delivery_status`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `delivery_status` (
   `deliveryStatusId` bigint NOT NULL AUTO_INCREMENT,
   `status` varchar(100) NOT NULL,
@@ -189,7 +144,7 @@ CREATE TABLE `delivery_status` (
 
 LOCK TABLES `delivery_status` WRITE;
 /*!40000 ALTER TABLE `delivery_status` DISABLE KEYS */;
-INSERT INTO `delivery_status` VALUES (1,'delivered',1,NULL),(2,'delivered',2,NULL),(3,'not delivered',3,NULL);
+INSERT INTO `delivery_status` VALUES (1,'delivered',1,'2022-06-30'),(2,'delivered',2,'2022-06-30'),(3,'not delivered',3,'2022-06-30');
 /*!40000 ALTER TABLE `delivery_status` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -197,17 +152,14 @@ UNLOCK TABLES;
 -- Table structure for table `log`
 --
 
-DROP TABLE IF EXISTS `log`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `log` (
   `id` int NOT NULL AUTO_INCREMENT,
   `typeOfAction` varchar(10) DEFAULT NULL,
   `dateCreated` datetime DEFAULT NULL,
   `username` varchar(100) DEFAULT NULL,
-  `action` varchar(200) DEFAULT NULL,
+  `action` varchar(1000) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -216,6 +168,7 @@ CREATE TABLE `log` (
 
 LOCK TABLES `log` WRITE;
 /*!40000 ALTER TABLE `log` DISABLE KEYS */;
+INSERT INTO `log` VALUES (1,'INFO','2022-06-28 22:03:31','admin','update product by id: 38 with info:ProductDTO(productId=0, productName=abc9, productPrice=100000, productQuantity=10, productRating=2.0, category=null, categoryId=1, productMediaSet=null, soldNumber=0)'),(2,'INFO','2022-06-28 22:03:55','admin','add a product with info:ProductDTO(productId=0, productName=xx1112345, productPrice=100000, productQuantity=10, productRating=1.0, category=null, categoryId=1, productMediaSet=null, soldNumber=0)'),(3,'INFO','2022-06-29 17:32:52','user','view All Product by Id: 1'),(4,'INFO','2022-06-29 17:32:58','user','view All Product by Id: 1');
 /*!40000 ALTER TABLE `log` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -223,9 +176,7 @@ UNLOCK TABLES;
 -- Table structure for table `product`
 --
 
-DROP TABLE IF EXISTS `product`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `product` (
   `productId` bigint NOT NULL AUTO_INCREMENT,
   `productName` varchar(50) NOT NULL,
@@ -238,7 +189,7 @@ CREATE TABLE `product` (
   CONSTRAINT `product_ibfk_1` FOREIGN KEY (`categoryId`) REFERENCES `category` (`categoryId`),
   CONSTRAINT `product_chk_1` CHECK ((`productQuantity` > 0)),
   CONSTRAINT `product_chk_2` CHECK ((`productRating` > 0))
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -247,7 +198,7 @@ CREATE TABLE `product` (
 
 LOCK TABLES `product` WRITE;
 /*!40000 ALTER TABLE `product` DISABLE KEYS */;
-INSERT INTO `product` VALUES (1,'abced',100000,10,3,1),(2,'samsung',3000,20,4.3,1),(3,'honda',8000,5,4.4,2),(4,'abc',100000,10,1,1),(35,'abc',100000,10,2,1),(36,'xx10',100000,10,1,1),(37,'xx11',100000,10,1,1),(38,'xx111\n',100000,10,1,1),(39,'xx1112',100000,10,1,1);
+INSERT INTO `product` VALUES (1,'abced',100000,10,3,1),(2,'samsung',3000,20,4.3,1),(3,'honda',8000,5,4.4,2),(4,'abc',100000,10,1,1),(35,'abc',100000,10,2,1),(36,'xx10',100000,10,1,1),(37,'xx11',100000,10,1,1),(38,'abc9',100000,10,2,1),(39,'xx1112',100000,10,1,1),(40,'xx1112345',100000,10,1,1);
 /*!40000 ALTER TABLE `product` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -255,9 +206,7 @@ UNLOCK TABLES;
 -- Table structure for table `productmedia`
 --
 
-DROP TABLE IF EXISTS `productmedia`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `productmedia` (
   `productMediaId` bigint NOT NULL AUTO_INCREMENT,
   `path` varchar(255) DEFAULT NULL,
@@ -266,7 +215,7 @@ CREATE TABLE `productmedia` (
   PRIMARY KEY (`productMediaId`),
   KEY `FKth3lbgpl0h1t6whpmb62lll3x` (`productId`),
   CONSTRAINT `FKth3lbgpl0h1t6whpmb62lll3x` FOREIGN KEY (`productId`) REFERENCES `product` (`productId`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -275,7 +224,7 @@ CREATE TABLE `productmedia` (
 
 LOCK TABLES `productmedia` WRITE;
 /*!40000 ALTER TABLE `productmedia` DISABLE KEYS */;
-INSERT INTO `productmedia` VALUES (8,'C:\\upload_mooc2\\36\\Screenshot (1991).png',36,'image/png'),(9,'C:\\upload_mooc2\\37\\Screenshot (1991).png',37,'image/png'),(10,'C:\\upload_mooc2\\38\\Screenshot (1991).png',38,'image/png'),(11,'C:\\upload_mooc2\\35\\Screenshot (1991).png',35,'image/png');
+INSERT INTO `productmedia` VALUES (8,'C:\\upload_mooc2\\36\\Screenshot (1991).png',36,'image/png'),(9,'C:\\upload_mooc2\\37\\Screenshot (1991).png',37,'image/png'),(11,'C:\\upload_mooc2\\35\\Screenshot (1991).png',35,'image/png'),(12,'C:\\upload_mooc238\\Screenshot (1996).png',38,'image/png'),(13,'C:\\upload_mooc240\\288779967_2838416369794252_134454667731048807_n.jpg',40,'image/jpeg');
 /*!40000 ALTER TABLE `productmedia` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -283,9 +232,7 @@ UNLOCK TABLES;
 -- Table structure for table `role`
 --
 
-DROP TABLE IF EXISTS `role`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `role` (
   `roleId` int NOT NULL AUTO_INCREMENT,
   `roleName` varchar(20) DEFAULT NULL,
@@ -307,9 +254,7 @@ UNLOCK TABLES;
 -- Table structure for table `user`
 --
 
-DROP TABLE IF EXISTS `user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `user` (
   `userId` bigint NOT NULL AUTO_INCREMENT,
   `username` varchar(50) NOT NULL,
@@ -338,9 +283,6 @@ UNLOCK TABLES;
 -- Table structure for table `user_product_rating`
 --
 
-DROP TABLE IF EXISTS `user_product_rating`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `user_product_rating` (
   `userProductRatingId` bigint NOT NULL AUTO_INCREMENT,
   `productId` bigint NOT NULL,
@@ -368,9 +310,7 @@ UNLOCK TABLES;
 -- Table structure for table `user_role`
 --
 
-DROP TABLE IF EXISTS `user_role`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
+
 CREATE TABLE `user_role` (
   `roleId` int NOT NULL,
   `userId` bigint NOT NULL,
@@ -400,4 +340,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-28 20:22:46
+-- Dump completed on 2022-06-30  0:36:19

@@ -50,7 +50,7 @@ public class ProductRatingServiceImpl implements ProductRatingService {
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         HttpEntity<String> entity = new HttpEntity<>("body", headers);
 
-        UserDTO userDTO = restTemplate.exchange("http://user-service/User/Search"+USERNAME,
+        UserDTO userDTO = restTemplate.exchange("http://user-service/User/Search/"+USERNAME,
                 HttpMethod.GET,entity,UserDTO.class).getBody();
 
         Optional<Rating> ratingOptional = productRatingRepository.findByUserIdAndProductId(userDTO.getUserId(),
