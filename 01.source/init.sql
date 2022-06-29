@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `mock2` /*!40100 DEFAULT CHARACTER SET utf8mb4 CO
 USE `mock2`;
 -- MySQL dump 10.13  Distrib 8.0.27, for Win64 (x86_64)
 --
--- Host: localhost    Database: mock2
+-- Host: 127.0.0.1    Database: mock2
 -- ------------------------------------------------------
--- Server version	8.0.27
+-- Server version	8.0.29
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -152,7 +152,7 @@ CREATE TABLE `category` (
   `categoryId` int NOT NULL AUTO_INCREMENT,
   `categoryName` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`categoryId`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -161,7 +161,7 @@ CREATE TABLE `category` (
 
 LOCK TABLES `category` WRITE;
 /*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category` VALUES (1,'Phone Update 2'),(2,'bike'),(4,'Iphone'),(5,'IphoneXS');
+INSERT INTO `category` VALUES (1,'Phone Update 2'),(2,'bike'),(4,'Iphone'),(5,'IphoneXS'),(6,'IphoneE');
 /*!40000 ALTER TABLE `category` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -191,6 +191,32 @@ LOCK TABLES `delivery_status` WRITE;
 /*!40000 ALTER TABLE `delivery_status` DISABLE KEYS */;
 INSERT INTO `delivery_status` VALUES (1,'delivered',1,NULL),(2,'delivered',2,NULL),(3,'not delivered',3,NULL);
 /*!40000 ALTER TABLE `delivery_status` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `log`
+--
+
+DROP TABLE IF EXISTS `log`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `log` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `typeOfAction` varchar(10) DEFAULT NULL,
+  `dateCreated` datetime DEFAULT NULL,
+  `username` varchar(100) DEFAULT NULL,
+  `action` varchar(200) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `log`
+--
+
+LOCK TABLES `log` WRITE;
+/*!40000 ALTER TABLE `log` DISABLE KEYS */;
+/*!40000 ALTER TABLE `log` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -374,4 +400,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-06-28  3:30:55
+-- Dump completed on 2022-06-28 20:22:46

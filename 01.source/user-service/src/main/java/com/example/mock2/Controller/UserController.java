@@ -89,9 +89,6 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.updateAUser(user));
     }
 
-    public static void main(String[] args) {
-        HashSet
-        HashMap a = new HashMap();
-    }
+
 }
 
