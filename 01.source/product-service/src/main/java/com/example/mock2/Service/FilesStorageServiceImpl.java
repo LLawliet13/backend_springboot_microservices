@@ -20,7 +20,9 @@ import javax.annotation.PreDestroy;
 
 @Service
 public class FilesStorageServiceImpl implements FilesStorageService {
-    private final static Path root = Paths.get("C:\\upload_mooc2\\");
+
+    //    private final static Path root = Paths.get("C:/upload_mooc2/");// for non-docker
+    private final static Path root = Paths.get("upload_mooc2/");
 
     @Override
     @PostConstruct
@@ -36,7 +38,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     @Override
     public String getPathFile(MultipartFile file, String subFolder) {
         String filename = file.getOriginalFilename();
-        return root + "\\" + subFolder + "\\" + filename;
+        return root  +"/"+ subFolder + "/" + filename;
     }
 
     @PreDestroy
@@ -50,19 +52,21 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     public String save(MultipartFile file, String subFolder) {
         String savingPath;
         try {
-            File theDir = new File(root + "\\" + subFolder);
+            File theDir = new File(root +"/"+ subFolder);
             if (!theDir.exists()) {
                 theDir.mkdirs();
             }
+            for (int i = 0; i < 50; i++)
+                System.out.println("Folder is Exist?" + theDir.getAbsolutePath() + theDir.exists());
             String filename = file.getOriginalFilename();
-            savingPath = root + "" + subFolder + "\\" + filename;
-            Files.copy(file.getInputStream(), this.root.resolve(subFolder + "\\" + filename), StandardCopyOption.REPLACE_EXISTING);
+            savingPath = root + "/" + subFolder + "/" + filename;
+            Files.copy(file.getInputStream(), this.root.resolve(subFolder + "/" + filename), StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("File input is Exist?" + new File(root + "/" + subFolder + "/" + filename).getAbsolutePath() + " is " + (new File(root + "/" + subFolder + "/" + filename)).exists());
         } catch (Exception e) {
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
         }
         return savingPath;
     }
-
 
 
     @Override
@@ -73,8 +77,8 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
     @Override
     public void deleteByPath(String path) {
-        if(!path.contains(root.toString())){
-            path = root+"\\"+path;
+        if (!path.contains(root.toString())) {
+            path = root +"/"+ path;
         }
         Path pathName = Paths.get(path);
         FileSystemUtils.deleteRecursively(pathName.toFile());
@@ -104,6 +108,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
             throw new RuntimeException("Could not load the files!");
         }
     }
+
     @Override
     public Resource load(String filename) {
         try {

@@ -37,6 +37,7 @@ services:
     build: ./product-service
     ports:
       - "8083:8083"
+    command: chmod ugo+w /upload_mooc2/
     networks:
       - all-services
     depends_on:
@@ -49,6 +50,8 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysqldb:3306/mock2
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: 12345
+    volumes:
+      - ./upload_mooc2/:/upload_mooc2/
   eureka-server:
     container_name: eureka-server
     build: ./eureka-server
