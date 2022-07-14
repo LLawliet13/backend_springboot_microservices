@@ -27,7 +27,7 @@ services:
       - db:/var/lib/mysql
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     environment:
-      - MYSQL_ROOT_HOST=172.18.0.3
+      - MYSQL_ROOT_HOST=%
       - MYSQL_ROOT_PASSWORD=12345
 volumes:
   db:
