@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.example.mock2.Mock2ApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 22.276 s - in com.example.mock2.Mock2ApplicationTests
